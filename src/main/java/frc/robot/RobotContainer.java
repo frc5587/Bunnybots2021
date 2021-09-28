@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import org.frc5587.lib.control.DeadbandJoystick;
+import org.frc5587.lib.control.DeadbandXboxController;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
@@ -21,6 +24,10 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+  // create controllers
+  private final DeadbandJoystick JOYSTICK = new DeadbandJoystick(0, 1.5);
+  private final DeadbandXboxController XBOX_CONTROLLER = new DeadbandXboxController(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
