@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import frc.robot.Constants.LEDConstants;
+
+import org.frc5587.lib.advanced.AddressableLEDController;
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
@@ -25,6 +29,8 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
+  private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH); 
+
   // create controllers
   private final DeadbandJoystick JOYSTICK = new DeadbandJoystick(0, 1.5);
   private final DeadbandXboxController XBOX_CONTROLLER = new DeadbandXboxController(1);
@@ -33,6 +39,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {return ledController.stretchRainbow(50*10, step, buffer);}, 0.02);
   }
 
   /**
