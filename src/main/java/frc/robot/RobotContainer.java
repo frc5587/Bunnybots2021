@@ -34,8 +34,8 @@ public class RobotContainer {
             LEDConstants.LED_LENGTH);
 
     // create controllers
-    private final DeadbandJoystick JOYSTICK = new DeadbandJoystick(0, 1.5);
-    private final DeadbandXboxController XBOX_CONTROLLER = new DeadbandXboxController(1);
+    private final DeadbandJoystick joystick = new DeadbandJoystick(0, 1.5);
+    private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
