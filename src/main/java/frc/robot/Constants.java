@@ -15,6 +15,6 @@ package frc.robot;
 public final class Constants {
     public static final class LEDConstants {
         public static final int PWM_PORT = 0;
-        public static final int LED_LENGTH = 0; 
+        public static final int LED_LENGTH = 300; 
     }
 }
