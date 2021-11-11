@@ -13,19 +13,19 @@ public class Drivetrain extends DrivetrainBase {
 
     @Override
     public void configureMotors() {
-        super.leftLeader.configFactoryDefault();
-        super.rightLeader.configFactoryDefault();
-        super.leftFollower.configFactoryDefault();
-        super.rightFollower.configFactoryDefault();
-        super.leftLeader.setNeutralMode(NeutralMode.Brake);
-        super.rightLeader.setNeutralMode(NeutralMode.Brake);
-        super.leftFollower.setNeutralMode(NeutralMode.Brake);
-        super.rightFollower.setNeutralMode(NeutralMode.Brake);
-        super.leftGroup.setInverted(DrivetrainConstants.LEFT_SIDE_INVERTED);
-        super.rightGroup.setInverted(DrivetrainConstants.RIGHT_SIDE_INVERTED);
-        super.leftLeader.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
-        super.rightLeader.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
-        super.leftFollower.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
-        super.rightFollower.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
+        leftLeader.configFactoryDefault();
+        rightLeader.configFactoryDefault();
+        leftFollower.configFactoryDefault();
+        rightFollower.configFactoryDefault();
+        leftLeader.setNeutralMode(NeutralMode.Brake);
+        rightLeader.setNeutralMode(NeutralMode.Brake);
+        leftFollower.setNeutralMode(NeutralMode.Brake);
+        rightFollower.setNeutralMode(NeutralMode.Brake);
+        leftGroup.setInverted(DrivetrainConstants.LEFT_SIDE_INVERTED);
+        rightGroup.setInverted(DrivetrainConstants.RIGHT_SIDE_INVERTED);
+        leftLeader.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
+        rightLeader.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
+        leftFollower.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
+        rightFollower.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
     }
 }
