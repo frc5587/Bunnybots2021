@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+
 import org.frc5587.lib.pid.FPID;
 
 /**
@@ -30,5 +32,10 @@ public final class Constants {
         public static final double TURN_PID_FORWARD_THROTTLE = 0;
         public static final double TURN_PID_UPDATE_PERIOD_SEC = 0.010;
         public static final boolean INVERT_GYRO_DIRECTION = true;
+
+        // motor current limit constants
+        public static final int SMART_CURRENT_LIMIT = 30;
+        public static final int HARD_CURRENT_LIMIT = 40;
+        public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT, 0);
     }
 }

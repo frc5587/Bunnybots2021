@@ -9,6 +9,7 @@ public class ArcadeDrive extends CommandBase {
     private final Drivetrain drivetrain;
     private final DoubleSupplier throttleSupplier, curveSupplier;
 
+    // ArcadeDrive uses any direction from a joystick to move the robot using velocity doubles.
     public ArcadeDrive(Drivetrain drivetrain, DoubleSupplier throttleSupplier, DoubleSupplier curveSupplier) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(drivetrain);

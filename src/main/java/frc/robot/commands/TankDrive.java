@@ -9,6 +9,7 @@ public class TankDrive extends CommandBase {
     private final Drivetrain drivetrain;
     private final DoubleSupplier leftThrottleSupplier, rightThrottleSupplier;
 
+    // TankDrive uses input from two joysticks to drive each side of the robot.
     public TankDrive(Drivetrain drivetrain, DoubleSupplier leftThrottleSupplier, DoubleSupplier rightThrottleSupplier) {
         addRequirements(drivetrain);
 

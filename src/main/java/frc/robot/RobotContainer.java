@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -27,7 +28,7 @@ public class RobotContainer {
 
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Joystick joy = new Joystick(0);
+  private final DeadbandJoystick joy = new DeadbandJoystick(0);
   private final DeadbandXboxController xb = new DeadbandXboxController(1);
   // the following line (and line 38 which uses it) has not been confirmed as working yet. 
   // private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getX());
