@@ -28,17 +28,13 @@ public class RobotContainer {
     private final Drivetrain drivetrain = new Drivetrain();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
-    // the following line (and line 38 which uses it) has not been confirmed as
-    // working yet.
-    // private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain,
-    // joy::getY, () -> -joy.getX());
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        // make drivetrain use arcadeDrive to drive
         drivetrain.setDefaultCommand(arcadeDrive);
-        // drivetrain.setDefaultCommand(arcadeDrive);
         // Configure the button bindings
         configureButtonBindings();
     }

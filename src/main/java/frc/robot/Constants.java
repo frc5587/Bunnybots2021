@@ -36,6 +36,6 @@ public final class Constants {
         // motor current limit constants
         public static final int SMART_CURRENT_LIMIT = 30;
         public static final int HARD_CURRENT_LIMIT = 40;
-        public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT, 0);
+        public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, 0);
     }
 }
