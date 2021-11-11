@@ -16,13 +16,13 @@ import org.frc5587.lib.pid.FPID;
 public final class Constants {
     public static class DrivetrainConstants {
         // motor ports 
-        public static final int LEFT_LEADER = 0;
-        public static final int LEFT_FOLLOWER = 1;
-        public static final int RIGHT_LEADER = 2;
-        public static final int RIGHT_FOLLOWER = 3;
+        public static final int LEFT_LEADER = 10;
+        public static final int LEFT_FOLLOWER = 11;
+        public static final int RIGHT_LEADER = 15;
+        public static final int RIGHT_FOLLOWER = 16;
 
         public static final boolean LEFT_SIDE_INVERTED = false;
-        public static final boolean RIGHT_SIDE_INVERTED = true;
+        public static final boolean RIGHT_SIDE_INVERTED = false;
         
         // PID constants
         public static final FPID TURN_FPID = new FPID(0, 0.1, 0, 0.009);

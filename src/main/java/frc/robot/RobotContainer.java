@@ -29,10 +29,13 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Joystick joy = new Joystick(0);
   private final DeadbandXboxController xb = new DeadbandXboxController(1);
+  // the following line (and line 38 which uses it) has not been confirmed as working yet. 
+  // private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getX());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     drivetrain.setDefaultCommand(new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getX()));
+    // drivetrain.setDefaultCommand(arcadeDrive);
     // Configure the button bindings
     configureButtonBindings();
   }
