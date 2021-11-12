@@ -4,18 +4,19 @@
 
 package frc.robot;
 
-import frc.robot.Constants.LEDConstants;
-
-import org.frc5587.lib.advanced.AddressableLEDController;
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
+import org.frc5587.lib.advanced.AddressableLEDController;
+
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.subsystems.Drivetrain;
+
+import frc.robot.Constants.LEDConstants;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -26,22 +27,23 @@ import edu.wpi.first.wpilibj2.command.Command;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // The robot's subsystems and commands are defined here...
-    private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-    private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+    // Controllers
+    private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
+    private final DeadbandXboxController xb = new DeadbandXboxController(1);
+    // Subsystems
+    private final Drivetrain drivetrain = new Drivetrain();
+    // Commands
+    private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
             LEDConstants.LED_LENGTH);
-
-    // create controllers
-    private final DeadbandJoystick joystick = new DeadbandJoystick(0, 1.5);
-    private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        // make drivetrain use arcadeDrive to drive
+        drivetrain.setDefaultCommand(arcadeDrive);
         // Configure the button bindings
         configureButtonBindings();
 
@@ -66,6 +68,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return m_autoCommand;
+        return null;
     }
 }
