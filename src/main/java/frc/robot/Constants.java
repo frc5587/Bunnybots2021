@@ -16,7 +16,7 @@ import org.frc5587.lib.pid.FPID;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static class DrivetrainConstants {
+    public static final class DrivetrainConstants {
         // motor ports 
         public static final int LEFT_LEADER = 10;
         public static final int LEFT_FOLLOWER = 11;
@@ -38,5 +38,10 @@ public final class Constants {
         public static final int HARD_CURRENT_LIMIT = 45;
         public static final double SMART_CURRENT_LIMIT_DELAY = 0.2; // seconds
         public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT_DELAY);
+    }
+
+    public static final class LEDConstants {
+        public static final int PWM_PORT = 0;
+        public static final int LED_LENGTH = 300; 
     }
 }

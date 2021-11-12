@@ -6,12 +6,18 @@ package frc.robot;
 
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
+import org.frc5587.lib.advanced.AddressableLEDController;
 
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.subsystems.Drivetrain;
+
+import frc.robot.Constants.LEDConstants;
+
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.ArcadeDrive;
-import frc.robot.subsystems.Drivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,6 +34,9 @@ public class RobotContainer {
     private final Drivetrain drivetrain = new Drivetrain();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    // Others
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
+            LEDConstants.LED_LENGTH);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -37,6 +46,10 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(arcadeDrive);
         // Configure the button bindings
         configureButtonBindings();
+
+        ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {
+            return ledController.stretchRainbow(50 * 10, step, buffer);
+        }, 0.02);
     }
 
     /**
