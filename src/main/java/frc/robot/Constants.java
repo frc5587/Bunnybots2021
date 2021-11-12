@@ -23,8 +23,8 @@ public final class Constants {
         public static final int RIGHT_LEADER = 15;
         public static final int RIGHT_FOLLOWER = 16;
 
-        public static final boolean LEFT_SIDE_INVERTED = false;
-        public static final boolean RIGHT_SIDE_INVERTED = false;
+        public static final boolean LEFT_SIDE_INVERTED = true;
+        public static final boolean RIGHT_SIDE_INVERTED = true;
         
         // PID constants
         public static final FPID TURN_FPID = new FPID(0, 0.1, 0, 0.009);
