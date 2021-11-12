@@ -34,8 +34,9 @@ public final class Constants {
         public static final boolean INVERT_GYRO_DIRECTION = true;
 
         // motor current limit constants
-        public static final int SMART_CURRENT_LIMIT = 30;
-        public static final int HARD_CURRENT_LIMIT = 40;
-        public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, 0);
+        public static final int SMART_CURRENT_LIMIT = 37;
+        public static final int HARD_CURRENT_LIMIT = 45;
+        public static final double SMART_CURRENT_LIMIT_DELAY = 0.2; // seconds
+        public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT_DELAY);
     }
 }
