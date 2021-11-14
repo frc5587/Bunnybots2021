@@ -18,7 +18,7 @@ public class Drivetrain extends DrivetrainBase {
         put("RIGHT_SIDE_INVERTED", DrivetrainConstants.RIGHT_SIDE_INVERTED);
     }};
     public Drivetrain() {
-        super(new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER), new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER), new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER), new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER), constants);
+        super(constants, new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER), new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER), new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER), new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER));
     }
 
     @Override
