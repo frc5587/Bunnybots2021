@@ -14,9 +14,7 @@ public class Drivetrain extends DrivetrainBase {
         DrivetrainConstants.TURN_PID_TOLERANCE_DEG,
         DrivetrainConstants.WHEEL_DIAMETER_METERS,
         DrivetrainConstants.HISTORY_LIMIT,
-        DrivetrainConstants.INVERT_GYRO_DIRECTION,
-        DrivetrainConstants.LEFT_SIDE_INVERTED,
-        DrivetrainConstants.RIGHT_SIDE_INVERTED
+        DrivetrainConstants.INVERT_GYRO_DIRECTION
     );
 
     public Drivetrain() {
