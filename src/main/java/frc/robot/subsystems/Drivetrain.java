@@ -1,24 +1,26 @@
 package frc.robot.subsystems;
 
-import java.util.Hashtable;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import frc.robot.Constants.DrivetrainConstants;
 import org.frc5587.lib.subsystems.DrivetrainBase;
 
 public class Drivetrain extends DrivetrainBase {
-    public static Hashtable<String, Object> constants = new Hashtable<String, Object>() {{
-        put("TURN_FPID", DrivetrainConstants.TURN_FPID);
-        put("TURN_PID_FORWARD_THROTTLE", DrivetrainConstants.TURN_PID_FORWARD_THROTTLE);
-        put("INVERT_GYRO_DIRECTION", DrivetrainConstants.INVERT_GYRO_DIRECTION);
-        put("WHEEL_DIAMETER_METERS", DrivetrainConstants.WHEEL_DIAMETER_METERS);
-        put("HISTORY_LIMIT", DrivetrainConstants.HISTORY_LIMIT);
-        put("TURN_PID_TOLERANCE_DEG", DrivetrainConstants.TURN_PID_TOLERANCE_DEG);
-        put("LEFT_SIDE_INVERTED", DrivetrainConstants.LEFT_SIDE_INVERTED);
-        put("RIGHT_SIDE_INVERTED", DrivetrainConstants.RIGHT_SIDE_INVERTED);
-    }};
+    public static int[] leftMotorIDs = new int[]{DrivetrainConstants.LEFT_LEADER, DrivetrainConstants.LEFT_FOLLOWER};
+    public static int[] rightMotorIDs = new int[]{DrivetrainConstants.RIGHT_LEADER, DrivetrainConstants.RIGHT_FOLLOWER};
+
+    public static DriveConstants constantsObj = new DriveConstants(
+        DrivetrainConstants.TURN_FPID, 
+        DrivetrainConstants.TURN_PID_FORWARD_THROTTLE, 
+        DrivetrainConstants.TURN_PID_TOLERANCE_DEG,
+        DrivetrainConstants.WHEEL_DIAMETER_METERS,
+        DrivetrainConstants.HISTORY_LIMIT,
+        DrivetrainConstants.INVERT_GYRO_DIRECTION,
+        DrivetrainConstants.LEFT_SIDE_INVERTED,
+        DrivetrainConstants.RIGHT_SIDE_INVERTED
+    );
+
     public Drivetrain() {
-        super(constants, new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER), new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER), new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER), new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER));
+        super(constantsObj, leftMotorIDs, rightMotorIDs);
     }
 
     @Override
