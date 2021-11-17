@@ -1,12 +1,16 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import frc.robot.Constants.DrivetrainConstants;
 import org.frc5587.lib.subsystems.DrivetrainBase;
 
 public class Drivetrain extends DrivetrainBase {
     public static int[] leftMotorIDs = new int[]{DrivetrainConstants.LEFT_LEADER, DrivetrainConstants.LEFT_FOLLOWER};
     public static int[] rightMotorIDs = new int[]{DrivetrainConstants.RIGHT_LEADER, DrivetrainConstants.RIGHT_FOLLOWER};
+    // WPI_TalonFX[] leftFollowers = new WPI_TalonFX[leftMotorIDs.length-1];
+    // WPI_TalonFX[] rightFollowers = new WPI_TalonFX[rightMotorIDs.length-1];
 
     public static DriveConstants constantsObj = new DriveConstants(
         DrivetrainConstants.TURN_FPID, 
@@ -25,12 +29,16 @@ public class Drivetrain extends DrivetrainBase {
     public void configureMotors() {
         leftLeader.configFactoryDefault();
         rightLeader.configFactoryDefault();
-        leftFollower.configFactoryDefault();
-        rightFollower.configFactoryDefault();
+        for(WPI_TalonFX follower : leftFollowers) {
+            follower.configFactoryDefault();
+            follower.setNeutralMode(NeutralMode.Brake);
+        }
+        for(WPI_TalonFX follower : rightFollowers) {
+            follower.configFactoryDefault();
+            follower.setNeutralMode(NeutralMode.Brake);
+        }
         leftLeader.setNeutralMode(NeutralMode.Brake);
         rightLeader.setNeutralMode(NeutralMode.Brake);
-        leftFollower.setNeutralMode(NeutralMode.Brake);
-        rightFollower.setNeutralMode(NeutralMode.Brake);
         leftGroup.setInverted(DrivetrainConstants.LEFT_SIDE_INVERTED);
         rightGroup.setInverted(DrivetrainConstants.RIGHT_SIDE_INVERTED);
         // leftLeader.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
