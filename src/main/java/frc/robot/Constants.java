@@ -23,8 +23,8 @@ public final class Constants {
         public static final int RIGHT_LEADER = 15;
         public static final int RIGHT_FOLLOWER = 16;
 
-        public static final boolean LEFT_SIDE_INVERTED = false;
-        public static final boolean RIGHT_SIDE_INVERTED = false;
+        public static final boolean LEFT_SIDE_INVERTED = true;
+        public static final boolean RIGHT_SIDE_INVERTED = true;
         
         // PID constants
         public static final FPID TURN_FPID = new FPID(0, 0.1, 0, 0.009);
@@ -38,6 +38,11 @@ public final class Constants {
         public static final int HARD_CURRENT_LIMIT = 45;
         public static final double SMART_CURRENT_LIMIT_DELAY = 0.2; // seconds
         public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT_DELAY);
+    
+        public static final int TICKS_PER_REV = 8192;
+        public static final double WHEEL_DIAMETER_METERS = 0.1524;
+        public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2;
+        public static final int HISTORY_LIMIT = 32;
     }
 
     public static final class LEDConstants {
