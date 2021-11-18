@@ -9,6 +9,7 @@ import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 
 import frc.robot.Constants.LEDConstants;
@@ -18,6 +19,12 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.BunnyDumperConstants;;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,6 +44,7 @@ public class RobotContainer {
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
             LEDConstants.LED_LENGTH);
+    private final BunnyDumper bunnyDumper = new BunnyDumper();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -58,7 +66,8 @@ public class RobotContainer {
      * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    private void configureButtonBindings() {
+    public void configureButtonBindings() {
+        Trigger leftTrigger = new Trigger(() -> xb.getTrigger(Hand.kLeft));
     }
 
     /**

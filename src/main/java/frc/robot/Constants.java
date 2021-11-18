@@ -6,6 +6,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
+import org.frc5587.lib.pid.UNP;
+import org.frc5587.lib.pid.PID;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -49,4 +51,8 @@ public final class Constants {
         public static final int PWM_PORT = 0;
         public static final int LED_LENGTH = 300; 
     }
+
+    public static class BunnyDumperConstants {
+        public static final int[] PISTON_PORTS = null;
+}
 }
