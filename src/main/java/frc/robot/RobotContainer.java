@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
@@ -36,7 +37,7 @@ import frc.robot.Constants.BunnyDumperConstants;;
 public class RobotContainer {
     // Controllers
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
-    private final DeadbandXboxController xb = new DeadbandXboxController(1);
+    private final GenericHID xb = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
     // Commands
@@ -67,7 +68,11 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     public void configureButtonBindings() {
-        Trigger leftTrigger = new Trigger(() -> xb.getTrigger(Hand.kLeft));
+        JoystickButton bButton = new JoystickButton(xb, XboxController.Button.kB.value);
+        POVButton rightDPad = new POVButton(xb, 90);
+
+        bButton.and(rightDPad).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
+        bButton.and(rightDPad.negate()).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
     }
 
     /**
