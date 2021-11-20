@@ -65,10 +65,14 @@ public class RobotContainer {
     public void configureButtonBindings() {
         // POVButton rightDPad = new POVButton(xb, 90);
 
+        // defines the b button
         JoystickButton bButton = new JoystickButton(xb, XboxController.Button.kB.value);
+        // defines the left trigger
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
+        // when b button and left trigger are pressed together, extend the pistons
         bButton.and(leftTrigger).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
+        // when the two buttons are released, retract the pistons
         bButton.and(leftTrigger.negate()).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
     }
 
