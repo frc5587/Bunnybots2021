@@ -32,15 +32,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     // Controllers
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
-    private final GenericHID xb = new DeadbandXboxController(1);
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
+    private final BunnyDumper bunnyDumper = new BunnyDumper();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
-    private final BunnyDumper bunnyDumper = new BunnyDumper();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -63,11 +62,7 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     public void configureButtonBindings() {
-        // POVButton rightDPad = new POVButton(xb, 90);
-
-        // defines the b button
-        JoystickButton bButton = new JoystickButton(xb, XboxController.Button.kB.value);
-        // defines the left trigger
+        JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
         // when b button and left trigger are pressed together, extend the pistons
