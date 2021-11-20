@@ -14,18 +14,13 @@ import frc.robot.subsystems.Drivetrain;
 
 import frc.robot.Constants.LEDConstants;
 
-import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.BunnyDumperConstants;;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,13 +33,13 @@ public class RobotContainer {
     // Controllers
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
     private final GenericHID xb = new DeadbandXboxController(1);
+    private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
-            LEDConstants.LED_LENGTH);
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
     private final BunnyDumper bunnyDumper = new BunnyDumper();
 
     /**
@@ -68,11 +63,13 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     public void configureButtonBindings() {
-        JoystickButton bButton = new JoystickButton(xb, XboxController.Button.kB.value);
-        POVButton rightDPad = new POVButton(xb, 90);
+        // POVButton rightDPad = new POVButton(xb, 90);
 
-        bButton.and(rightDPad).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
-        bButton.and(rightDPad.negate()).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
+        JoystickButton bButton = new JoystickButton(xb, XboxController.Button.kB.value);
+        Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
+
+        bButton.and(leftTrigger).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
+        bButton.and(leftTrigger.negate()).whenActive(() -> bunnyDumper.extend(), bunnyDumper);
     }
 
     /**
