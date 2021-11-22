@@ -73,7 +73,7 @@ public class RobotContainer {
     // when y button & left trigger are active, move intake backwards
     yButton.and(leftTrigger).whenActive(intake::backward, intake);
     // when the y button is, or the y button & left trigger are, inactive - stop.
-    yButton.and(leftTrigger.whenInactive(intake::stop, intake)); 
+    yButton.and(leftTrigger).whenInactive(intake::stop, intake); 
   }
 
   /**
