@@ -4,11 +4,18 @@
 
 package frc.robot;
 
+
+import org.frc5587.lib.control.DeadbandXboxController;
+
+import frc.robot.subsystems.Intake;
+
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -17,10 +24,12 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  // subsystems
+  private final Intake intake = new Intake();
+  // controllers
+  private final DeadbandXboxController xb = new DeadbandXboxController(1);
+  // commands
+  
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -34,7 +43,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton yButton = new JoystickButton(xb, XboxController.Button.kY.value);
+    Trigger leftTrigger = new Trigger(() -> xb.getTrigger(Hand.kLeft));
+
+    // when y button is active, move intake forwards
+    yButton.whenActive(intake::forward, intake);
+    // when y button & left trigger are active, move intake backwards
+    yButton.and(leftTrigger).whenActive(intake::backward, intake);
+    // when the y button is, or the y button & left trigger are, inactive - stop.
+    yButton.and(leftTrigger.whenInactive(intake::stop, intake)); 
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -42,7 +61,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return null;
   }
 }
