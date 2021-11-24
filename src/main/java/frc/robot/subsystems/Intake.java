@@ -22,8 +22,8 @@ public class Intake extends SubsystemBase {
         rightIntake.restoreFactoryDefaults();
         leftIntake.restoreFactoryDefaults();
 
-        rightIntake.setInverted(IntakeConstants.INVERTED);
-        leftIntake.setInverted(IntakeConstants.INVERTED);
+        rightIntake.setInverted(IntakeConstants.RIGHT_MOTOR_INVERTED);
+        leftIntake.setInverted(IntakeConstants.LEFT_MOTOR_INVERTED);
 
         rightIntake.setSmartCurrentLimit(IntakeConstants.STALL_LIMIT, IntakeConstants.FREE_LIMIT);
         leftIntake.setSmartCurrentLimit(IntakeConstants.STALL_LIMIT, IntakeConstants.FREE_LIMIT);

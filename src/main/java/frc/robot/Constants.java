@@ -55,12 +55,13 @@ public final class Constants {
         public static final int RIGHT_MOTOR = 20;
         public static final int LEFT_MOTOR = 25;
 
-        public static final boolean INVERTED = true;
+        public static final boolean RIGHT_MOTOR_INVERTED = true;
+        public static final boolean LEFT_MOTOR_INVERTED = true;
         // motor limits
-        public static final int STALL_LIMIT = 35;
-        public static final int FREE_LIMIT = 40;
+        public static final int STALL_LIMIT = 20;
+        public static final int FREE_LIMIT = 25;
         // motor speeds
-        public static final int THROTTLE = 1;
+        public static final double THROTTLE = 1;
     }
 }
 
