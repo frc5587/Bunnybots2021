@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
@@ -43,19 +42,20 @@ public class RobotContainer {
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
             LEDConstants.LED_LENGTH);
-  
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-     // make drivetrain use arcadeDrive to drive
-    drivetrain.setDefaultCommand(arcadeDrive);
-    // Configure the button bindings
-    configureButtonBindings();
-    
-    ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {
-      return ledController.stretchRainbow(50 * 10, step, buffer);
-    }, 0.02);
-  }
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // make drivetrain use arcadeDrive to drive
+        drivetrain.setDefaultCommand(arcadeDrive);
+        // Configure the button bindings
+        configureButtonBindings();
+
+        ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {
+            return ledController.stretchRainbow(50 * 10, step, buffer);
+        }, 0.02);
+    }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -73,12 +73,12 @@ public class RobotContainer {
     yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return null;
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return null;
+    }
 }
