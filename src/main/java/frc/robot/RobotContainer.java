@@ -67,10 +67,8 @@ public class RobotContainer {
     JoystickButton yButton = new JoystickButton(xb, XboxController.Button.kY.value);
     Trigger leftTrigger = new Trigger(() -> xb.getTrigger(Hand.kLeft));
 
-    // when y button is active, move intake forwards
-    yButton.whenActive(intake::forward, intake);
-    // when the y button is inactive - stop
-    yButton.whenActive(intake::stop, intake);
+    // when y button is active, move intake forwards | when the y button is inactive - stop.
+    yButton.whenActive(intake::forward, intake).whenInactive(intake::stop, intake)
     // when y button & left trigger are active, move intake backwards | when the y button & left trigger are inactive - stop. 
     yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
   }
