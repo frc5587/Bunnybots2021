@@ -5,12 +5,16 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+
 import frc.robot.Constants.IntakeConstants;
 
 
 public class Intake extends SubsystemBase {
     private final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
     private final CANSparkMax leftIntake = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushless);
+    
+    protected SpeedControllerGroup rightIntake, leftIntake;
 
     public Intake() {
         super();
@@ -31,28 +35,27 @@ public class Intake extends SubsystemBase {
         rightIntake.setIdleMode(IdleMode.kBrake);
         leftIntake.setIdleMode(IdleMode.kBrake);
     }
+    
+    intakeMotors = new SpeedControllerGroup(rightIntake, leftIntake);
 
     /**
      * Moves intake forwards
      */
     public void forward() {
-        rightIntake.set(IntakeConstants.THROTTLE);
-        leftIntake.set(IntakeConstants.THROTTLE);
+        intakeMotors.set(IntakeConstants.THROTTLE);
     }
 
     /**
      * Moves intake backwards
      */
     public void backward() {
-        rightIntake.set(-IntakeConstants.THROTTLE);
-        leftIntake.set(-IntakeConstants.THROTTLE);
+        intakeMotors.set(-IntakeConstants.THROTTLE);
     }
 
     /**
      * Stops intake motors
      */
     public void stop() {
-        rightIntake.set(0);
-        leftIntake.set(0);
+        intakeMotors.set(0;)
     }
 }
