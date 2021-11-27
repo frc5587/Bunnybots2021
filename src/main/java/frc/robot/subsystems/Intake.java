@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Stops intake motors
+     * Stops intake
      */
     public void stop() {
         intakeMotors.set(0);
