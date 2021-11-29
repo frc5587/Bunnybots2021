@@ -64,9 +64,9 @@ public class RobotContainer {
         JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
-        // when b button and left trigger are pressed together, extend the pistons
+        // when b button and left trigger are pressed together, extend the pistons. when the two buttons are released, retract the pistons
         bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract, bunnyDumper);
-        // when the two buttons are released, retract the pistons
+        
         // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
     }
 
