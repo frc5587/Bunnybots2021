@@ -6,6 +6,9 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
+import org.frc5587.lib.pid.PID;
+
+import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -45,6 +48,20 @@ public final class Constants {
         public static final int HISTORY_LIMIT = 32;
     }
 
+    public static final class ArmConstants {
+        public static final double ARM_SPEED_MULTIPLIER = 0.2;
+        public static final double ARM_LENGTH_INCHES = 10.0;
+        public static final int LIMIT_SWITCH = 1;
+        public static final int PID_SLOT = 0;
+        public static final PID ARM_PID = new PID(29, 0, 0);
+        public static final ArmFeedforward FEED_FORWARD = new ArmFeedforward(.219, .439, .169, .0125);
+
+        public static final int ARM_LEADER = 15;
+        public static final int ARM_FOLLOWER = 16;
+
+        public static final boolean LEADER_INVERTED = false;
+        public static final boolean FOLLOWERS_INVERTED = false;
+    }
     public static final class LEDConstants {
         public static final int PWM_PORT = 0;
         public static final int LED_LENGTH = 300; 

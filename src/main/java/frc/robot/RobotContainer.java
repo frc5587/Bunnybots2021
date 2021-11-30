@@ -9,15 +9,18 @@ import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ArmMovementConstant;
+import frc.robot.commands.ArmMovementConstantInverted;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 
 import frc.robot.Constants.LEDConstants;
 
-import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,8 +35,11 @@ public class RobotContainer {
     private final DeadbandXboxController xb = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
+    private final Arm arm = new Arm();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    private final ArmMovementConstant armMovement = new ArmMovementConstant(arm);
+    private final ArmMovementConstantInverted armMovementInverted = new ArmMovementConstantInverted(arm);
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
             LEDConstants.LED_LENGTH);
@@ -59,6 +65,11 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+        POVButton dpadUp = new POVButton(xb, 0);
+        POVButton dpadDown = new POVButton(xb, 90);
+
+        dpadUp.whenActive(armMovement);
+        dpadDown.whenActive(armMovementInverted);
     }
 
     /**
