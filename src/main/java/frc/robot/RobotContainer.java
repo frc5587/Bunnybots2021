@@ -7,18 +7,17 @@ package frc.robot;
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
-
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmMovementConstant;
 import frc.robot.commands.ArmMovementConstantInverted;
+import frc.robot.commands.ArmMovementThrottle;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
-
 import frc.robot.Constants.LEDConstants;
-
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -40,16 +39,18 @@ public class RobotContainer {
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     private final ArmMovementConstant armMovement = new ArmMovementConstant(arm);
     private final ArmMovementConstantInverted armMovementInverted = new ArmMovementConstantInverted(arm);
+    private final ArmMovementThrottle armMovementThrottle = new ArmMovementThrottle(arm, () -> xb.getY(Hand.kRight));
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
             LEDConstants.LED_LENGTH);
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         // make drivetrain use arcadeDrive to drive
         drivetrain.setDefaultCommand(arcadeDrive);
+        // make the arm use the xbox joystick to move
+        arm.setDefaultCommand(armMovementThrottle);
         // Configure the button bindings
         configureButtonBindings();
 
@@ -66,7 +67,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         POVButton dpadUp = new POVButton(xb, 0);
-        POVButton dpadDown = new POVButton(xb, 90);
+        POVButton dpadDown = new POVButton(xb, 180);
 
         dpadUp.whenActive(armMovement);
         dpadDown.whenActive(armMovementInverted);

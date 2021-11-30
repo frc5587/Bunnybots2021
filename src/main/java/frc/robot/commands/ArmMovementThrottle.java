@@ -1,15 +1,19 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class ArmMovementConstant extends CommandBase{
+public class ArmMovementThrottle extends CommandBase {
     private final Arm arm;
-
-    public ArmMovementConstant(Arm arm) {
+    private final DoubleSupplier throttleSupplier;
+    
+    public ArmMovementThrottle(Arm arm, DoubleSupplier throttleSupplier) {
         addRequirements(arm);
 
         this.arm = arm;
+        this.throttleSupplier = throttleSupplier;
     }
 
     @Override
@@ -18,7 +22,7 @@ public class ArmMovementConstant extends CommandBase{
 
     @Override
     public void execute() {
-        arm.moveArmFixedSpeed();
+        arm.moveArmThrottle(throttleSupplier.getAsDouble());
     }
 
     @Override
