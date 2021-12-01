@@ -9,15 +9,17 @@ import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 
 import frc.robot.Constants.LEDConstants;
 
-import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -29,14 +31,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
     // Controllers
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
-    private final DeadbandXboxController xb = new DeadbandXboxController(1);
+    private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
+    private final BunnyDumper bunnyDumper = new BunnyDumper();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
-            LEDConstants.LED_LENGTH);
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -58,7 +60,14 @@ public class RobotContainer {
      * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    private void configureButtonBindings() {
+    public void configureButtonBindings() {
+        JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
+        Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
+
+        // when b button and left trigger are pressed together, extend the pistons. when the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract, bunnyDumper);
+        
+        // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
     }
 
     /**
