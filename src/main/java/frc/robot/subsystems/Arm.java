@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import org.frc5587.lib.subsystems.PivotingArmBase;
+
+import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Constants.ArmConstants;
 
 public class Arm extends PivotingArmBase {
@@ -15,18 +18,35 @@ public class Arm extends PivotingArmBase {
         ArmConstants.ARM_PID,
         ArmConstants.FEED_FORWARD
     );
-    public static int[] motorIDs = new int[]{ArmConstants.ARM_LEADER, ArmConstants.ARM_FOLLOWER};
+    public static WPI_TalonFX[] motors = new WPI_TalonFX[]{new WPI_TalonFX(ArmConstants.ARM_LEADER), new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)};
     
     public Arm() {
-        super(constants, motorIDs);
+        super(constants, motors);
+    }
+
+    @Override
+    public double getEncoderValue(EncoderValueType valueType) {
+        switch(valueType) {
+            case kPosition:
+            return motors[0].getSelectedSensorPosition();
+            case kVelocity:
+            return motors[0].getSelectedSensorVelocity();
+            default:
+            return 0;
+        }
+    }
+
+    @Override
+    public void setEncoderPosition(double position) {
+        motors[0].setSelectedSensorPosition(position);
     }
 
     @Override
     public void configureMotors() {
-        leader.configFactoryDefault();
-        leader.setNeutralMode(NeutralMode.Brake);
+        motors[0].configFactoryDefault();
+        motors[0].setNeutralMode(NeutralMode.Brake);
         leader.setInverted(ArmConstants.LEADER_INVERTED);
-        for(WPI_TalonFX follower : followers) {
+        for(WPI_TalonFX follower : (WPI_TalonFX[]) followers) {
             follower.configFactoryDefault();
             follower.setNeutralMode(NeutralMode.Brake);
             follower.setInverted(ArmConstants.FOLLOWERS_INVERTED);
