@@ -17,6 +17,7 @@ import frc.robot.Constants.LEDConstants;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -38,7 +39,8 @@ public class RobotContainer {
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
+            LEDConstants.LED_LENGTH);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,10 +66,10 @@ public class RobotContainer {
         JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
-        // when b button and left trigger are pressed together, extend the pistons. when the two buttons are released, retract the pistons
-        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract, bunnyDumper);
-        
-        // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
+        // when b button and left trigger are pressed together, extend the pistons. when
+        // the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(() -> bunnyDumper.pistonsSet(Value.kForward), bunnyDumper)
+                .whenInactive(() -> bunnyDumper.pistonsSet(Value.kReverse), bunnyDumper);
     }
 
     /**
