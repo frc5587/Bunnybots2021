@@ -53,7 +53,7 @@ public final class Constants {
         public static final double ARM_LENGTH_INCHES = 10.0;
         public static final int LIMIT_SWITCH = 1;
         public static final int PID_SLOT = 0;
-        public static final PID ARM_PID = new PID(29, 0, 0);
+        public static final FPID ARM_PID = new FPID(29, 0, 0, 0);
         public static final ArmFeedforward FEED_FORWARD = new ArmFeedforward(.219, .439, .169, .0125);
 
         public static final int ARM_LEADER = 20;
