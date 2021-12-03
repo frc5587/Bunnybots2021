@@ -10,6 +10,7 @@ import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 
@@ -34,16 +35,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     // Controllers
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
-    private final DeadbandXboxController xb = new DeadbandXboxController(1);
+    private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
     private final Intake intake = new Intake();
+    private final BunnyDumper bunnyDumper = new BunnyDumper();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
-            LEDConstants.LED_LENGTH);
-  
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -64,14 +64,31 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    JoystickButton yButton = new JoystickButton(xb, XboxController.Button.kY.value);
-    Trigger leftTrigger = new Trigger(() -> xb.getTrigger(Hand.kLeft));
+    // Y Button for Intake controls
+    JoystickButton yButton = new JoystickButton(xboxController, XboxController.Button.kY.value);
+    // B Button for Bunny Dumper controls
+    JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
+    // Left Trigger for Intake & Bunny Dumper controls
+    Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
+    /*
+    Intake
+    */
+    
     // when y button is active, move intake forwards | when the y button is inactive - stop.
     // TODO Test if negation of leftTrigger is necessary for proper command handling.
     yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake)
     // when y button & left trigger are active, move intake backwards | when the y button & left trigger are inactive - stop. 
     yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
+    
+    /*
+    Bunny Dumper
+    */
+    
+    // when b button and left trigger are pressed together, extend the pistons. when the two buttons are released, retract the pistons
+    bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract, bunnyDumper);
+    
+    // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
   }
 
   /**

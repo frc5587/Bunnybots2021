@@ -64,4 +64,8 @@ public final class Constants {
         // motor speeds
         public static final double THROTTLE = 1;
     }
+
+    public static class BunnyDumperConstants {
+        public static final int[] PISTON_PORTS = { 0, 1 };
+  }
 }
