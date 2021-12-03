@@ -70,7 +70,7 @@ public class RobotContainer {
         POVButton dpadDown = new POVButton(xb, 180);
 
         dpadUp.whenHeld(armMovement);
-        dpadDown.whenHeld(armMovement);
+        dpadDown.whenHeld(armMovementInverted);
     }
 
     /**
