@@ -6,7 +6,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
-import org.frc5587.lib.pid.PID;
 
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 
