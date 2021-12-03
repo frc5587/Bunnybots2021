@@ -8,8 +8,6 @@ import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
 import frc.robot.commands.ArcadeDrive;
-import frc.robot.commands.ArmMovementConstant;
-import frc.robot.commands.ArmMovementConstantInverted;
 import frc.robot.commands.ArmMovementThrottle;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
@@ -37,8 +35,6 @@ public class RobotContainer {
     private final Arm arm = new Arm();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
-    private final ArmMovementConstant armMovement = new ArmMovementConstant(arm);
-    private final ArmMovementConstantInverted armMovementInverted = new ArmMovementConstantInverted(arm);
     private final ArmMovementThrottle armMovementThrottle = new ArmMovementThrottle(arm, () -> xb.getY(Hand.kRight));
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
@@ -69,8 +65,8 @@ public class RobotContainer {
         POVButton dpadUp = new POVButton(xb, 0);
         POVButton dpadDown = new POVButton(xb, 180);
 
-        dpadUp.whenHeld(armMovement);
-        dpadDown.whenHeld(armMovementInverted);
+        dpadUp.whenActive(arm::moveArmFixedSpeed, arm).whenInactive(arm::stop, arm);
+        dpadDown.whenActive(arm::moveArmFixedReversed, arm).whenInactive(arm::stop, arm);
     }
 
     /**
