@@ -22,14 +22,17 @@ public class Intake extends SubsystemBase {
     }
 
     private void configureSparkMax() {
-        intakeMotors.restoreFactoryDefaults();
+        rightIntake.restoreFactoryDefaults();
+        leftIntake.restoreFactoryDefaults();
 
         rightIntake.setInverted(IntakeConstants.RIGHT_MOTOR_INVERTED);
         leftIntake.setInverted(IntakeConstants.LEFT_MOTOR_INVERTED);
 
-        intakeMotors.setSmartCurrentLimit(IntakeConstants.STALL_LIMIT, IntakeConstants.FREE_LIMIT);
+        rightIntake.setSmartCurrentLimit(IntakeConstants.STALL_LIMIT, IntakeConstants.FREE_LIMIT);
+        leftIntake.setSmartCurrentLimit(IntakeConstants.STALL_LIMIT, IntakeConstants.FREE_LIMIT);
 
-        intakeMotors.setIdleMode(IdleMode.kBrake);
+        rightIntake.setIdleMode(IdleMode.kBrake);
+        leftIntake.setIdleMode(IdleMode.kBrake);
     }
 
     /**
