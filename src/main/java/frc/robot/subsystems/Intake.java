@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase {
     private final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
     private final CANSparkMax leftIntake = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushless);
 
-    private final SpeedControllerGroup intakeMotors = new SpeedControllerGroup(rightIntake, leftIntake);
+    private final SpeedControllerGroup intakeMotors = new SpeedControllerGroup(leftIntake, rightIntake);
 
     public Intake() {
         super();
@@ -47,6 +47,16 @@ public class Intake extends SubsystemBase {
      */
     public void backward() {
         intakeMotors.set(-IntakeConstants.THROTTLE);
+    }
+
+    public void left() {
+        leftIntake.set(-IntakeConstants.THROTTLE/2);
+        rightIntake.set(-IntakeConstants.THROTTLE/3.5);
+    }
+
+    public void right() {
+        leftIntake.set(-IntakeConstants.THROTTLE/3.5);
+        rightIntake.set(-IntakeConstants.THROTTLE/2);
     }
 
     /**

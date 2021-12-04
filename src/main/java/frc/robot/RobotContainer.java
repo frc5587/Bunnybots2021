@@ -70,6 +70,7 @@ public class RobotContainer {
     JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
     // Left Trigger for Intake & Bunny Dumper controls
     Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
+    Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
 
     /*
     Intake
@@ -81,6 +82,9 @@ public class RobotContainer {
     // when y button & left trigger are active, move intake backwards | when the y button & left trigger are inactive - stop. 
     yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
     
+    leftTrigger.and(yButton.negate()).and(bButton.negate()).whenActive(intake::left, intake).whenInactive(intake::stop, intake);
+    rightTrigger.and(yButton.negate()).and(bButton.negate()).whenActive(intake::right, intake).whenInactive(intake::stop, intake);
+
     /*
     Bunny Dumper
     */
