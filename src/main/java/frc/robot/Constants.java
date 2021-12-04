@@ -7,6 +7,8 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -16,6 +18,18 @@ import org.frc5587.lib.pid.FPID;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public static final class AutoConstants {
+        public static final double KS = 0.583;
+        public static final double KV = 0.448;
+        public static final double KA = 0.0365;
+        public static final double KP = 1.37;
+        public static final double KD = 0;
+        public static final double TRACK_WIDTH = 0.683;
+
+        public static final DifferentialDriveKinematics DRIVETRAIN_KINEMATICS = new DifferentialDriveKinematics(
+                TRACK_WIDTH);
+    }
+
     public static final class DrivetrainConstants {
         // motor ports 
         public static final int LEFT_LEADER = 10;

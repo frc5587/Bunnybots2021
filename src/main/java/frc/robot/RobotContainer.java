@@ -6,12 +6,18 @@ package frc.robot;
 
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
+
+import java.io.IOException;
+
 import org.frc5587.lib.advanced.AddressableLEDController;
+import org.frc5587.lib.auto.AutoPath;
+import org.frc5587.lib.auto.RamseteCommandWrapper;
+import org.frc5587.lib.auto.RamseteCommandWrapper.RamseteConstants;
 
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
-
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.LEDConstants;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -77,6 +83,12 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return null;
+        // return null
+        try {
+            return new RamseteCommandWrapper(drivetrain, new AutoPath("s path"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)).resetOdometryOnStart();
+        } catch (IOException e) {
+            System.out.println("FAIL: " + e.toString());
+            return null;
+        }
     }
 }
