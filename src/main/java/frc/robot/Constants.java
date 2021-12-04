@@ -52,15 +52,15 @@ public final class Constants {
     
     public static final class IntakeConstants {
         // motor ports
-        public static final int RIGHT_MOTOR = 20;
-        public static final int LEFT_MOTOR = 25;
+        public static final int RIGHT_MOTOR = 25;
+        public static final int LEFT_MOTOR = 26;
         
         // TODO Test directionality of motors
         public static final boolean RIGHT_MOTOR_INVERTED = true;
         public static final boolean LEFT_MOTOR_INVERTED = false;
         // motor limits
-        public static final int STALL_LIMIT = 25;
-        public static final int FREE_LIMIT = 26;
+        public static final int STALL_LIMIT = 20;
+        public static final int FREE_LIMIT = 25;
         // motor speeds
         public static final double THROTTLE = 1;
     }
