@@ -57,22 +57,22 @@ public class Arm extends PivotingArmBase {
     public void configureMotors() {
         try {
             this.leader.configFactoryDefault();
-            this.leader.setNeutralMode(NeutralMode.Brake);
-            this.leader.setInverted(ArmConstants.LEADER_INVERTED);
-            resetEncoders();
         }
         catch(NullPointerException e) {
-            System.out.println("NullPointerException " + e + " from arm leader motor");
+            System.out.println("NullPointerException " + e + " from arm leader configFactoryDefault");
         }
-        try {
-            for(WPI_TalonFX follower : this.followers) {
+        this.leader.setNeutralMode(NeutralMode.Brake);
+        this.leader.setInverted(ArmConstants.LEADER_INVERTED);
+
+        for(WPI_TalonFX follower : this.followers) {
+            try {
                 follower.configFactoryDefault();
-                follower.setNeutralMode(NeutralMode.Brake);
-                follower.setInverted(ArmConstants.FOLLOWERS_INVERTED);
             }
-        }
-        catch(NullPointerException e) {
-            System.out.println("NullPointerException " + e + " from arm follower motor");
+            catch(NullPointerException e) {
+                System.out.println("NullPointerException " + e + " from arm follower configFactoryDefault");
+            }
+            follower.setNeutralMode(NeutralMode.Brake);
+            follower.setInverted(ArmConstants.FOLLOWERS_INVERTED);
         }
     }
 }
