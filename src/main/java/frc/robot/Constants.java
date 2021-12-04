@@ -59,8 +59,8 @@ public final class Constants {
         public static final boolean RIGHT_MOTOR_INVERTED = true;
         public static final boolean LEFT_MOTOR_INVERTED = false;
         // motor limits
-        public static final int STALL_LIMIT = 20;
-        public static final int FREE_LIMIT = 25;
+        public static final int STALL_LIMIT = 25;
+        public static final int FREE_LIMIT = 26;
         // motor speeds
         public static final double THROTTLE = 1;
     }
