@@ -77,7 +77,7 @@ public class RobotContainer {
     
     // when y button is active, move intake forwards | when the y button is inactive - stop.
     // TODO Test if negation of leftTrigger is necessary for proper command handling.
-    yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake)
+    yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
     // when y button & left trigger are active, move intake backwards | when the y button & left trigger are inactive - stop. 
     yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
     
