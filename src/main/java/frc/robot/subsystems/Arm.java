@@ -41,19 +41,6 @@ public class Arm extends PivotingArmBase {
     }
 
     @Override
-    public void setFPID() {
-        this.leader.config_kP(ArmConstants.PID_SLOT, ArmConstants.ARM_PID.kP);
-        this.leader.config_kI(ArmConstants.PID_SLOT, ArmConstants.ARM_PID.kI);
-        this.leader.config_kD(ArmConstants.PID_SLOT, ArmConstants.ARM_PID.kD);
-        this.leader.config_kF(ArmConstants.PID_SLOT, ArmConstants.ARM_PID.kF);
-    }
-
-    @Override
-    public void setFeedForward(double ff) {
-        this.leader.config_kF(ArmConstants.PID_SLOT, ff);
-    }
-
-    @Override
     public void configureMotors() {
         try {
             this.leader.configFactoryDefault();
