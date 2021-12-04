@@ -51,6 +51,6 @@ public final class Constants {
     }
 
     public static class BunnyDumperConstants {
-        public static final int[] PISTON_PORTS = { 0, 1 };
+        public static final int[][] PISTON_PORTS = {{0, 1}};
 }
 }

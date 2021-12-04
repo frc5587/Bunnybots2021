@@ -68,8 +68,8 @@ public class RobotContainer {
 
         // when b button and left trigger are pressed together, extend the pistons. when
         // the two buttons are released, retract the pistons
-        bButton.and(leftTrigger).whenActive(() -> bunnyDumper.pistonsSet(Value.kForward), bunnyDumper)
-                .whenInactive(() -> bunnyDumper.pistonsSet(Value.kReverse), bunnyDumper);
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
+                .whenInactive(bunnyDumper::retract, bunnyDumper);
     }
 
     /**
