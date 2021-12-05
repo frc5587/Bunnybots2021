@@ -43,6 +43,8 @@ public class RobotContainer {
     private final BunnyDumper bunnyDumper = new BunnyDumper();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    // Auto commands
+    private final Command ramseteTest = new RamseteCommandWrapper(drivetrain, new AutoPath("s path"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)).resetOdometryOnStart(); 
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
 
@@ -84,11 +86,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         // return null
-        try {
-            return new RamseteCommandWrapper(drivetrain, new AutoPath("s path"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)).resetOdometryOnStart();
-        } catch (IOException e) {
-            System.out.println("FAIL: " + e.toString());
-            return null;
-        }
+        return ramseteTest;
     }
 }
