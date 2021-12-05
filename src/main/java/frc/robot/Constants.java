@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
     public static final class AutoConstants {
-        public static final double KS = 0.583;
-        public static final double KV = 0.448;
-        public static final double KA = 0.0365;
-        public static final double KP = 1.37;
+        public static final double KS = 0.588;
+        public static final double KV = 0.935;
+        public static final double KA = 0.0763;
+        public static final double KP = 2.79;
         public static final double KD = 0;
         public static final double TRACK_WIDTH = 0.683;
 
