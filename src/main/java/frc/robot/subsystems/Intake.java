@@ -49,16 +49,6 @@ public class Intake extends SubsystemBase {
         intakeMotors.set(-IntakeConstants.THROTTLE);
     }
 
-    public void left() {
-        leftIntake.set(-IntakeConstants.THROTTLE/2);
-        rightIntake.set(-IntakeConstants.THROTTLE/3.5);
-    }
-
-    public void right() {
-        leftIntake.set(-IntakeConstants.THROTTLE/3.5);
-        rightIntake.set(-IntakeConstants.THROTTLE/2);
-    }
-
     /**
      * Stops intake
      */

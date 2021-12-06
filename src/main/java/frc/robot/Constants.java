@@ -62,7 +62,7 @@ public final class Constants {
         public static final int STALL_LIMIT = 20;
         public static final int FREE_LIMIT = 25;
         // motor speeds
-        public static final double THROTTLE = 0.75;
+        public static final double THROTTLE = 0.5;
     }
 
     public static class BunnyDumperConstants {
