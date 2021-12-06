@@ -24,6 +24,23 @@ public class Arm extends PivotingArmBase {
     }
 
     @Override
+    public double getEncoderValue(EncoderValueType valueType) {
+        switch(valueType) {
+            case Position:
+            return this.leader.getSelectedSensorPosition();
+            case Velocity:
+            return this.leader.getSelectedSensorVelocity();
+            default:
+            return 0;
+        }
+    }
+
+    @Override
+    public void setEncoderPosition(double position) {
+        this.leader.setSelectedSensorPosition(position);
+    }
+    
+    @Override
     public void configureMotors() {
         try {
             this.leader.configFactoryDefault();
