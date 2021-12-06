@@ -12,9 +12,7 @@ public class Arm extends PivotingArmBase {
 
     public static ArmsConstants constants = new ArmsConstants(
         ArmConstants.ARM_SPEED_MULTIPLIER, 
-        ArmConstants.ARM_LENGTH_INCHES, 
         ArmConstants.LIMIT_SWITCH,
-        ArmConstants.PID_SLOT,
         ArmConstants.ARM_PID,
         ArmConstants.FEED_FORWARD
     );
