@@ -41,16 +41,16 @@ public class Arm extends PivotingArmBase {
     @Override
     public void configureMotors() {
         try {
-            this.leader.configFactoryDefault();
-            this.leader.setNeutralMode(NeutralMode.Brake);
-            this.leader.setInverted(ArmConstants.LEADER_INVERTED);
+            leader.configFactoryDefault();
+            leader.setNeutralMode(NeutralMode.Brake);
+            leader.setInverted(ArmConstants.LEADER_INVERTED);
             resetEncoders();
         }
         catch(NullPointerException e) {
             System.out.println("NullPointerException " + e + " from arm leader motor");
         }
         try {
-            for(WPI_TalonFX follower : this.followers) {
+            for(WPI_TalonFX follower : followers) {
                 follower.configFactoryDefault();
                 follower.setNeutralMode(NeutralMode.Brake);
                 follower.setInverted(ArmConstants.FOLLOWERS_INVERTED);
