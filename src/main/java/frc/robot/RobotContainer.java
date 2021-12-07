@@ -11,12 +11,15 @@ import org.frc5587.lib.advanced.AddressableLEDController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 
 import frc.robot.Constants.LEDConstants;
 
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -34,11 +37,13 @@ public class RobotContainer {
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
+    private final Intake intake = new Intake();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
+            LEDConstants.LED_LENGTH);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -56,17 +61,40 @@ public class RobotContainer {
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
-     * created by instantiating a {@link GenericHID} or one of its subclasses
-     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    public void configureButtonBindings() {
+    private void configureButtonBindings() {
+        // Y Button for Intake controls
+        JoystickButton yButton = new JoystickButton(xboxController, XboxController.Button.kY.value);
+        // B Button for Bunny Dumper controls
         JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
+        // Left Trigger for Intake & Bunny Dumper controls
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
-        // when b button and left trigger are pressed together, extend the pistons. when the two buttons are released, retract the pistons
-        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract, bunnyDumper);
-        
+        /*
+         * Intake
+         */
+
+        // when y button is active, move intake forwards | when the y button is inactive
+        // - stop.
+        yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
+        // when y button & left trigger are active, move intake backwards | when the y
+        // button & left trigger are inactive - stop.
+        yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
+
+        /*
+         * Bunny Dumper
+         */
+
+        // when b button and left trigger are pressed together, extend the pistons. when
+        // the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract,
+                bunnyDumper);
+
         // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
     }
 
@@ -76,7 +104,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
         return null;
     }
 }

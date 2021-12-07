@@ -34,8 +34,8 @@ public final class Constants {
         public static final boolean INVERT_GYRO_DIRECTION = true;
 
         // motor current limit constants
-        public static final int SMART_CURRENT_LIMIT = 37;
-        public static final int HARD_CURRENT_LIMIT = 45;
+        public static final int SMART_CURRENT_LIMIT = 35;
+        public static final int HARD_CURRENT_LIMIT = 40;
         public static final double SMART_CURRENT_LIMIT_DELAY = 0.2; // seconds
         public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT_DELAY);
     
@@ -49,8 +49,22 @@ public final class Constants {
         public static final int PWM_PORT = 0;
         public static final int LED_LENGTH = 300; 
     }
+    
+    public static final class IntakeConstants {
+        // motor ports
+        public static final int RIGHT_MOTOR = 25;
+        public static final int LEFT_MOTOR = 26;
+        
+        public static final boolean RIGHT_MOTOR_INVERTED = false;
+        public static final boolean LEFT_MOTOR_INVERTED = true;
+        // motor limits
+        public static final int STALL_LIMIT = 20;
+        public static final int FREE_LIMIT = 25;
+        // motor speeds
+        public static final double THROTTLE = 0.5;
+    }
 
     public static class BunnyDumperConstants {
         public static final int[] PISTON_PORTS = { 0, 1 };
-}
+    }
 }
