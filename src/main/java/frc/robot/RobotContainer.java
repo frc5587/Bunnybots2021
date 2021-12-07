@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 import org.frc5587.lib.advanced.AddressableLEDController;
@@ -43,61 +42,69 @@ public class RobotContainer {
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
+            LEDConstants.LED_LENGTH);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-     // make drivetrain use arcadeDrive to drive
-    drivetrain.setDefaultCommand(arcadeDrive);
-    // Configure the button bindings
-    configureButtonBindings();
-    
-    ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {
-      return ledController.stretchRainbow(50 * 10, step, buffer);
-    }, 0.02);
-  }
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // make drivetrain use arcadeDrive to drive
+        drivetrain.setDefaultCommand(arcadeDrive);
+        // Configure the button bindings
+        configureButtonBindings();
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-    // Y Button for Intake controls
-    JoystickButton yButton = new JoystickButton(xboxController, XboxController.Button.kY.value);
-    // B Button for Bunny Dumper controls
-    JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
-    // Left Trigger for Intake & Bunny Dumper controls
-    Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
-    Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
+        ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {
+            return ledController.stretchRainbow(50 * 10, step, buffer);
+        }, 0.02);
+    }
 
-    /*
-    Intake
-    */
-    
-    // when y button is active, move intake forwards | when the y button is inactive - stop.
-    // TODO Test if negation of leftTrigger is necessary for proper command handling.
-    yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
-    // when y button & left trigger are active, move intake backwards | when the y button & left trigger are inactive - stop. 
-    yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
-    
-    /*
-    Bunny Dumper
-    */
-    
-    // when b button and left trigger are pressed together, extend the pistons. when the two buttons are released, retract the pistons
-    bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract, bunnyDumper);
-    
-    // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
-  }
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        // Y Button for Intake controls
+        JoystickButton yButton = new JoystickButton(xboxController, XboxController.Button.kY.value);
+        // B Button for Bunny Dumper controls
+        JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
+        // Left Trigger for Intake & Bunny Dumper controls
+        Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
+        Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return null;
-  }
+        /*
+         * Intake
+         */
+
+        // when y button is active, move intake forwards | when the y button is inactive
+        // - stop.
+        yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
+        // when y button & left trigger are active, move intake backwards | when the y
+        // button & left trigger are inactive - stop.
+        yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
+
+        /*
+         * Bunny Dumper
+         */
+
+        // when b button and left trigger are pressed together, extend the pistons. when
+        // the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract,
+                bunnyDumper);
+
+        // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
+    }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return null;
+    }
 }
