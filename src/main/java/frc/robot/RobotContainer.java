@@ -74,7 +74,6 @@ public class RobotContainer {
         JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
         // Left Trigger for Intake & Bunny Dumper controls
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
-        Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
 
         /*
          * Intake

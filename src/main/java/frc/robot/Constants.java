@@ -55,7 +55,6 @@ public final class Constants {
         public static final int RIGHT_MOTOR = 25;
         public static final int LEFT_MOTOR = 26;
         
-        // TODO Test directionality of motors
         public static final boolean RIGHT_MOTOR_INVERTED = false;
         public static final boolean LEFT_MOTOR_INVERTED = true;
         // motor limits
