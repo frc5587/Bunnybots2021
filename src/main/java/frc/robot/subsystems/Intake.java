@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase {
      * Moves intake backwards
      */
     public void backward() {
-        intakeMotors.set(-IntakeConstants.THROTTLE);
+        intakeMotors.set(-IntakeConstants.THROTTLE/2.5);
     }
 
     /**
