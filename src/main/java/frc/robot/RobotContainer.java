@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -43,8 +44,14 @@ public class RobotContainer {
     private final BunnyDumper bunnyDumper = new BunnyDumper();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
-    // Auto commands
-    private final Command ramseteTest = new RamseteCommandWrapper(drivetrain, new AutoPath("s path"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)).resetOdometryOnStart(); 
+    // Auto paths
+    private final Command ramseteTest = new RamseteCommandWrapper(drivetrain, new AutoPath("s path"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
+    private final Command getRightBox = new RamseteCommandWrapper(drivetrain, new AutoPath("get right box"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
+    private final Command dropOffRightBox = new RamseteCommandWrapper(drivetrain, new AutoPath("drop off right box"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
+    private final Command backupAndCenter = new RamseteCommandWrapper(drivetrain, new AutoPath("backup and center"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
+    private final Command getRightBox2 = new RamseteCommandWrapper(drivetrain, new AutoPath("get right box 2"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
+    private final Command dropOffRightBox2 = new RamseteCommandWrapper(drivetrain, new AutoPath("drop off right box 2"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
+    private final Command backupAndCenter2 = new RamseteCommandWrapper(drivetrain, new AutoPath("backup and center 2"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
 
@@ -87,5 +94,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         // return null
         return ramseteTest;
+        // return new SequentialCommandGroup(getRightBox, dropOffRightBox, backupAndCenter);
     }
 }
