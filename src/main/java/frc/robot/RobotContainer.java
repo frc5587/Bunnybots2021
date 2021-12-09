@@ -8,6 +8,7 @@ import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.frc5587.lib.advanced.AddressableLEDController;
 import org.frc5587.lib.auto.AutoPath;
@@ -22,6 +23,9 @@ import frc.robot.Constants.LEDConstants;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -45,13 +49,16 @@ public class RobotContainer {
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Auto paths
-    private final Command ramseteTest = new RamseteCommandWrapper(drivetrain, new AutoPath("s path"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
-    private final Command getRightBox = new RamseteCommandWrapper(drivetrain, new AutoPath("get right box"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
-    private final Command dropOffRightBox = new RamseteCommandWrapper(drivetrain, new AutoPath("drop off right box"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
-    private final Command backupAndCenter = new RamseteCommandWrapper(drivetrain, new AutoPath("backup and center"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
-    private final Command getRightBox2 = new RamseteCommandWrapper(drivetrain, new AutoPath("get right box 2"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
-    private final Command dropOffRightBox2 = new RamseteCommandWrapper(drivetrain, new AutoPath("drop off right box 2"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
-    private final Command backupAndCenter2 = new RamseteCommandWrapper(drivetrain, new AutoPath("backup and center 2"), new RamseteConstants(AutoConstants.KS, AutoConstants.KV, AutoConstants.KA, AutoConstants.KP, 3, 3, AutoConstants.DRIVETRAIN_KINEMATICS)); 
+    private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(drivetrain, new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper dropOffRightBox = new RamseteCommandWrapper(drivetrain, new AutoPath("drop off right box"), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper backupAndCenter = new RamseteCommandWrapper(drivetrain, new AutoPath("backup and center"), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper getRightBox2 = new RamseteCommandWrapper(drivetrain, new AutoPath("get right box 2"), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper dropOffRightBox2 = new RamseteCommandWrapper(drivetrain, new AutoPath("drop off right box 2"), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper backupAndCenter2 = new RamseteCommandWrapper(drivetrain, new AutoPath("backup and center 2"), AutoConstants.RAMSETE_CONSTANTS); 
+    // Testing auto paths
+    private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(drivetrain, new AutoPath("s path"), AutoConstants.RAMSETE_CONSTANTS).resetOdometryOnStart(); 
+    private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(drivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(drivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
 
@@ -93,7 +100,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         // return null
-        return ramseteTest;
+        return y2Meters.zeroOdometryOnStart(); //TODO this should move forward 2 meters
         // return new SequentialCommandGroup(getRightBox, dropOffRightBox, backupAndCenter);
     }
 }

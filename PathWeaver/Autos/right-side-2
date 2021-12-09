@@ -1,4 +1,3 @@
-get right box.path
 get right box 2.path
 drop off right box 2.path
 backup and center 2.path

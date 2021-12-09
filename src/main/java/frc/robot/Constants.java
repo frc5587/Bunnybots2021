@@ -5,6 +5,7 @@
 package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
+import org.frc5587.lib.auto.RamseteCommandWrapper.RamseteConstants;
 import org.frc5587.lib.pid.FPID;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -19,15 +20,20 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants {
     public static final class AutoConstants {
-        public static final double KS = 0.588;
-        public static final double KV = 0.935;
-        public static final double KA = 0.0763;
-        public static final double KP = 2.79;
+        public static final double KS = 0.602;
+        public static final double KV = 1.18;
+        public static final double KA = 0.0965;
+        public static final double KP = 2.18;
         public static final double KD = 0;
         public static final double TRACK_WIDTH = 0.683;
 
+        public static final double MAXIMUM_VELOCITY = 3; // m/s
+        public static final double MAXIMUM_ACCELERATION = 3; // m/s^2
+
         public static final DifferentialDriveKinematics DRIVETRAIN_KINEMATICS = new DifferentialDriveKinematics(
                 TRACK_WIDTH);
+
+        public static final RamseteConstants RAMSETE_CONSTANTS = new RamseteConstants(KS, KV, KA, KP, MAXIMUM_VELOCITY, MAXIMUM_ACCELERATION, DRIVETRAIN_KINEMATICS);
     }
 
     public static final class DrivetrainConstants {
@@ -57,6 +63,9 @@ public final class Constants {
         public static final double WHEEL_DIAMETER_METERS = 0.1524;
         public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2;
         public static final int HISTORY_LIMIT = 32;
+
+        public static final int ENCODER_EDGES_PER_REV = 2048;
+        public static final double GEARING = (54/20) * (50/12);
     }
 
     public static final class LEDConstants {

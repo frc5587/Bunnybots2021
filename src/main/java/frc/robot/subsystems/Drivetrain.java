@@ -18,7 +18,9 @@ public class Drivetrain extends DrivetrainBase {
         DrivetrainConstants.TURN_PID_TOLERANCE_DEG,
         DrivetrainConstants.WHEEL_DIAMETER_METERS,
         DrivetrainConstants.HISTORY_LIMIT,
-        DrivetrainConstants.INVERT_GYRO_DIRECTION
+        DrivetrainConstants.INVERT_GYRO_DIRECTION,
+        DrivetrainConstants.ENCODER_EDGES_PER_REV,
+        DrivetrainConstants.GEARING
     );
 
     public Drivetrain() {
@@ -45,5 +47,11 @@ public class Drivetrain extends DrivetrainBase {
         // rightLeader.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
         // leftFollower.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
         // rightFollower.configStatorCurrentLimit(DrivetrainConstants.STATOR_CURRENT_LIMIT_CONFIGURATION);
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+        System.out.println("X:  " + getPose() + "  Y:  " + getPose().getTranslation().getY() + "  R:  " + getHeading() + "  " + getPose().getRotation());
     }
 }
