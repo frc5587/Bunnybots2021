@@ -13,11 +13,13 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.Constants.LEDConstants;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -64,9 +66,10 @@ public class RobotContainer {
     private void configureButtonBindings() {
         POVButton dpadUp = new POVButton(xb, 0);
         POVButton dpadDown = new POVButton(xb, 180);
+        Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
-        dpadUp.whenActive(arm::moveArmFixedSpeed, arm).whenInactive(arm::stop, arm);
-        dpadDown.whenActive(arm::moveArmFixedReversed, arm).whenInactive(arm::stop, arm);
+        dpadUp.whileActiveContinuous(arm::moveArmFixedSpeed, arm).whenInactive(arm::stop, arm);
+        dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveArmFixedReversed, arm).whenInactive(arm::stop, arm);
     }
 
     /**
