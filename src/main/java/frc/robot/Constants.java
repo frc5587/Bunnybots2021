@@ -6,6 +6,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
+import org.frc5587.lib.pid.PID;
 
 import edu.wpi.first.wpilibj.controller.ArmFeedforward;
 
@@ -48,15 +49,19 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
+        public static final double K_S = 0.57447;
         public static final double K_COS = 0.24835;
+        public static final double K_V = 0.015959;
+        public static final double K_A = 0.00014283;
+
         public static final double K_P = 0.41067; // might be 0.034222
         public static final double K_D = 0.0044118; // might be 0.00036765
 
         public static final double ARM_SPEED_MULTIPLIER = 0.3;
         public static final int LIMIT_SWITCH = 0;
         public static final int PID_SLOT = 0;
-        public static final FPID ARM_PID = new FPID(29, K_P, 0, K_D);
-        public static final ArmFeedforward FEED_FORWARD = new ArmFeedforward(.219, .439, .169, .0125);
+        public static final PID ARM_PID = new PID(K_P, 0, K_D);
+        public static final ArmFeedforward FEED_FORWARD = new ArmFeedforward(K_S, K_COS, K_V, K_A);
 
         public static final int ARM_LEADER = 20;
         public static final int ARM_FOLLOWER = 21;
