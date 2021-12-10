@@ -49,8 +49,8 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final double K_COS = 0.24835;
-        public static final double K_P = 0.41067;
-        public static final double k_D = 0.0044118;
+        public static final double K_P = 0.41067; // might be 0.034222
+        public static final double k_D = 0.0044118; // might be 0.00036765
 
         public static final double ARM_SPEED_MULTIPLIER = 0.3;
         public static final double ARM_LENGTH_INCHES = 10.0;
