@@ -22,7 +22,7 @@ public class ArmMovementThrottle extends CommandBase {
 
     @Override
     public void execute() {
-        arm.moveArmThrottle(throttleSupplier.getAsDouble());
+        arm.set(throttleSupplier.getAsDouble());
     }
 
     @Override

@@ -7,8 +7,7 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
 import org.frc5587.lib.pid.PID;
-
-import edu.wpi.first.wpilibj.controller.ArmFeedforward;
+import org.frc5587.lib.controllers.FFPIDController;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -40,7 +39,12 @@ public final class Constants {
         public static final int SMART_CURRENT_LIMIT = 37;
         public static final int HARD_CURRENT_LIMIT = 45;
         public static final double SMART_CURRENT_LIMIT_DELAY = 0.2; // seconds
-        public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT_DELAY);
+        public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(
+            true, 
+            DrivetrainConstants.SMART_CURRENT_LIMIT, 
+            DrivetrainConstants.HARD_CURRENT_LIMIT, 
+            DrivetrainConstants.SMART_CURRENT_LIMIT_DELAY
+        );
     
         public static final int TICKS_PER_REV = 8192;
         public static final double WHEEL_DIAMETER_METERS = 0.1524;
@@ -49,25 +53,28 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final double K_S = 0.57447;
-        public static final double K_COS = 0.24835;
-        public static final double K_V = 0.015959;
-        public static final double K_A = 0.00014283;
+        public static final double K_S = 0.52458;//0.57447;
+        public static final double K_COS = 0.28918;//0.24835;
+        public static final double K_V = 0.015807;//0.015959;
+        public static final double K_A = 0.00014523;//0.00014283;
 
-        public static final double K_P = 0.41067; // might be 0.034222
-        public static final double K_D = 0.0044118; // might be 0.00036765
+        public static final double K_P = 0.0052384;//0.034222; // might be 0.41067
+        public static final double K_D = 0.0001757;//0.00036765; // might be 0.0044118
+
+        public static final PID ARM_PID = new PID(K_P, 0, K_D);
+        public static final FFPIDController FEED_FORWARD = new FFPIDController(K_S, K_COS, 0, K_V, K_A);
 
         public static final double ARM_SPEED_MULTIPLIER = 0.3;
+        public static final double GEARING = 55.125;
+        public static final int ENCODER_CPR = 2048;
         public static final int LIMIT_SWITCH = 0;
         public static final int PID_SLOT = 0;
-        public static final PID ARM_PID = new PID(K_P, 0, K_D);
-        public static final ArmFeedforward FEED_FORWARD = new ArmFeedforward(K_S, K_COS, K_V, K_A);
 
         public static final int ARM_LEADER = 20;
         public static final int ARM_FOLLOWER = 21;
 
-        public static final boolean LEADER_INVERTED = false;
-        public static final boolean FOLLOWERS_INVERTED = false;
+        public static final boolean MOTORS_INVERTED = false;
+        public static final boolean LIMIT_SWITCH_INVERTED = true;
     }
     public static final class LEDConstants {
         public static final int PWM_PORT = 0;

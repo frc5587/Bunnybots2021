@@ -13,7 +13,6 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.Constants.LEDConstants;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -48,7 +47,7 @@ public class RobotContainer {
         // make drivetrain use arcadeDrive to drive
         drivetrain.setDefaultCommand(arcadeDrive);
         // make the arm use the xbox joystick to move
-        arm.setDefaultCommand(armMovementThrottle);
+        // arm.setDefaultCommand(armMovementThrottle);
         // Configure the button bindings
         configureButtonBindings();
 
@@ -68,8 +67,8 @@ public class RobotContainer {
         POVButton dpadDown = new POVButton(xb, 180);
         Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
-        dpadUp.whileActiveContinuous(arm::moveArmFixedSpeed, arm).whenInactive(arm::stop, arm);
-        dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveArmFixedReversed, arm).whenInactive(arm::stop, arm);
+        // dpadUp.whileActiveContinuous(arm::moveByFixedSpeed, arm).whenInactive(arm::stop, arm);
+        // dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveFixedReversed, arm).whenInactive(arm::stop, arm);
     }
 
     /**
