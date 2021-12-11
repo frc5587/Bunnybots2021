@@ -37,7 +37,7 @@ public class RobotContainer {
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH, LEDConstants.LED_LENGTH, 255));
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2, LEDConstants.LED_LENGTH, 255));
     private final Drivetrain drivetrain = new Drivetrain();
     private final Intake intake = new Intake();
     private final BunnyDumper bunnyDumper = new BunnyDumper();

@@ -47,8 +47,8 @@ public final class Constants {
 
     public static final class LEDConstants {
         public static final int PWM_PORT = 0;
-        public static final int LED_LENGTH = 300; 
-        public static final int LED_SPEED = 10;
+        public static final int LED_LENGTH = 152; 
+        public static final int LED_SPEED = 50;
     }
     
     public static final class IntakeConstants {
