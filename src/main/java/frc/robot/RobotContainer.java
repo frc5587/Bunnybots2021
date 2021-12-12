@@ -14,20 +14,25 @@ import org.frc5587.lib.advanced.AddressableLEDController;
 import org.frc5587.lib.auto.AutoPath;
 import org.frc5587.lib.auto.RamseteCommandWrapper;
 import org.frc5587.lib.auto.RamseteCommandWrapper.RamseteConstants;
+import org.frc5587.lib.advanced.RainbowLEDPattern;
 
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.SuperSimpleDrivetrain;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.subsystems.Intake;
+
 import frc.robot.Constants.LEDConstants;
 
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -46,8 +51,10 @@ public class RobotContainer {
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     // private final Drivetrain drivetrain = new Drivetrain();
+    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2, LEDConstants.LED_LENGTH, 255));
     private final SuperSimpleDrivetrain ssDrivetrain = new SuperSimpleDrivetrain();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
+    private final Intake intake = new Intake();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(ssDrivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Auto paths
@@ -61,8 +68,6 @@ public class RobotContainer {
     private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("s path"), AutoConstants.RAMSETE_CONSTANTS).resetOdometryOnStart(); 
     private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(ssDrivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
     private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(ssDrivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
-    // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -72,25 +77,44 @@ public class RobotContainer {
         ssDrivetrain.setDefaultCommand(arcadeDrive);
         // Configure the button bindings
         configureButtonBindings();
-
-        ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {
-            return ledController.stretchRainbow(50 * 10, step, buffer);
-        }, 0.02);
     }
 
     /**
      * Use this method to define your button->command mappings. Buttons can be
-     * created by instantiating a {@link GenericHID} or one of its subclasses
-     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
-    public void configureButtonBindings() {
+    private void configureButtonBindings() {
+        // Y Button for Intake controls
+        JoystickButton yButton = new JoystickButton(xboxController, XboxController.Button.kY.value);
+        // B Button for Bunny Dumper controls
         JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
+        // Left Trigger for Intake & Bunny Dumper controls
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
-        // when b button and left trigger are pressed together, extend the pistons. when the two buttons are released, retract the pistons
-        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract, bunnyDumper);
-        
+        /*
+         * Intake
+         */
+
+        // when y button is active, move intake forwards | when the y button is inactive
+        // - stop.
+        yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
+        // when y button & left trigger are active, move intake backwards | when the y
+        // button & left trigger are inactive - stop.
+        yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
+
+        /*
+         * Bunny Dumper
+         */
+
+        // when b button and left trigger are pressed together, extend the pistons. when
+        // the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract,
+                bunnyDumper);
+
         // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
     }
 
