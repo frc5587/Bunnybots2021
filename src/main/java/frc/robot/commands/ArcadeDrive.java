@@ -3,14 +3,14 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.SuperSimpleDrivetrain;
 
 public class ArcadeDrive extends CommandBase {
-    private final Drivetrain drivetrain;
+    private final SuperSimpleDrivetrain drivetrain;
     private final DoubleSupplier throttleSupplier, curveSupplier;
 
     // ArcadeDrive uses any direction from a joystick to move the robot using velocity doubles.
-    public ArcadeDrive(Drivetrain drivetrain, DoubleSupplier throttleSupplier, DoubleSupplier curveSupplier) {
+    public ArcadeDrive(SuperSimpleDrivetrain drivetrain, DoubleSupplier throttleSupplier, DoubleSupplier curveSupplier) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(drivetrain);
 

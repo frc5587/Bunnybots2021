@@ -9,6 +9,7 @@ import org.frc5587.lib.auto.RamseteCommandWrapper.RamseteConstants;
 import org.frc5587.lib.pid.FPID;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -60,7 +61,7 @@ public final class Constants {
         public static final StatorCurrentLimitConfiguration STATOR_CURRENT_LIMIT_CONFIGURATION = new StatorCurrentLimitConfiguration(true, DrivetrainConstants.SMART_CURRENT_LIMIT, DrivetrainConstants.HARD_CURRENT_LIMIT, DrivetrainConstants.SMART_CURRENT_LIMIT_DELAY);
     
         public static final int TICKS_PER_REV = 8192;
-        public static final double WHEEL_DIAMETER_METERS = 0.1524;
+        public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
         public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2;
         public static final int HISTORY_LIMIT = 32;
 
