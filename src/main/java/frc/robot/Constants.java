@@ -67,6 +67,8 @@ public final class Constants {
 
         public static final int ENCODER_EDGES_PER_REV = 2048;
         public static final double GEARING = (54/20) * (50/12);
+
+        public static final double CRAWL_THROTTLE = 0.1;
     }
 
     public static final class LEDConstants {
@@ -87,6 +89,14 @@ public final class Constants {
         public static final int FREE_LIMIT = 25;
         // motor speeds
         public static final double THROTTLE = 0.5;
+
+        public static final int PDP_SLOT_1 = -1; // TODO update with real pdp slot
+        public static final int PDP_SLOT_2 = -1; // TODO update with real pdp slot
+
+        public static final double STALL_VELOCITY_CURRENT_THRESHOLD = 1;    // TODO this is prolly wrong
+        public static final double STALL_ACCELERATION_THRESHOLD = 1;        // TODO this is prolly wrong
+        public static final double EJECTING_VELOCITY_CURRENT_THRESHOLD = 5; // TODO this is prolly wrong
+        public static final double EJECTING_ACCELERATION_THRESHOLD = 2;     // TODO this is prolly wrong
     }
 
     public static class BunnyDumperConstants {

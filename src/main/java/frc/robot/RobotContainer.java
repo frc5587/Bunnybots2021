@@ -7,16 +7,16 @@ package frc.robot;
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.frc5587.lib.advanced.AddressableLEDController;
 import org.frc5587.lib.auto.AutoPath;
 import org.frc5587.lib.auto.RamseteCommandWrapper;
-import org.frc5587.lib.auto.RamseteCommandWrapper.RamseteConstants;
 import org.frc5587.lib.advanced.RainbowLEDPattern;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.EjectCrate;
+import frc.robot.commands.IntakeCrate;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.SuperSimpleDrivetrain;
@@ -31,9 +31,9 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -57,6 +57,8 @@ public class RobotContainer {
     private final Intake intake = new Intake();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(ssDrivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    private final IntakeCrate intakeCrate = new IntakeCrate(intake);
+    private final EjectCrate ejectCrate = new EjectCrate(intake);
     // Auto paths
     private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS); 
     private final RamseteCommandWrapper dropOffRightBox = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("drop off right box"), AutoConstants.RAMSETE_CONSTANTS); 
@@ -127,6 +129,11 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
         // return null
         return y2Meters.zeroOdometryOnStart(); //TODO this should move forward 2 meters
+
+        // return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), dropOffRightBox, ejectCrate, backupAndCenter);
+
+        // return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), dropOffRightBox, ejectCrate, new ParallelCommandGroup(getRightBox2, intakeCrate), ejectCrate, backupAndCenter2);
+
         // return new SequentialCommandGroup(getRightBox, dropOffRightBox, backupAndCenter);
     }
 }

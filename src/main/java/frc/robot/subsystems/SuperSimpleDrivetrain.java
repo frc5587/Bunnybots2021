@@ -149,4 +149,8 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
     public void stop() {
         tankDriveVolts(0, 0);
     }
+
+    public void crawl() {
+        tankDriveVolts(DrivetrainConstants.CRAWL_THROTTLE, DrivetrainConstants.CRAWL_THROTTLE);
+    }
 }
