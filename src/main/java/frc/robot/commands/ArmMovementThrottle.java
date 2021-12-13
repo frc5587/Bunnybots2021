@@ -4,12 +4,13 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.FullArmSubsys;
 
 public class ArmMovementThrottle extends CommandBase {
-    private final Arm arm;
+    private final FullArmSubsys arm;
     private final DoubleSupplier throttleSupplier;
     
-    public ArmMovementThrottle(Arm arm, DoubleSupplier throttleSupplier) {
+    public ArmMovementThrottle(FullArmSubsys arm, DoubleSupplier throttleSupplier) {
         addRequirements(arm);
 
         this.arm = arm;

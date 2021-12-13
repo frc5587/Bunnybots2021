@@ -11,6 +11,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmMovementThrottle;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.FullArmSubsys;
 import frc.robot.Constants.LEDConstants;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -33,7 +34,7 @@ public class RobotContainer {
     private final DeadbandXboxController xb = new DeadbandXboxController(1);
     // Subsystems
     private final Drivetrain drivetrain = new Drivetrain();
-    private final Arm arm = new Arm();
+    private final FullArmSubsys arm = new FullArmSubsys();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     private final ArmMovementThrottle armMovementThrottle = new ArmMovementThrottle(arm, () -> xb.getY(Hand.kRight));
@@ -65,7 +66,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         POVButton dpadUp = new POVButton(xb, 0);
         POVButton dpadDown = new POVButton(xb, 180);
-        Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
+        // Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
         // dpadUp.whileActiveContinuous(arm::moveByFixedSpeed, arm).whenInactive(arm::stop, arm);
         // dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveFixedReversed, arm).whenInactive(arm::stop, arm);

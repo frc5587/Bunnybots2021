@@ -105,17 +105,18 @@ public class FullArmSubsys extends PIDSubsystem {
 
     @Override
     public void useOutput(double output, double setpoint) {
-        set(output + setpoint);
+        set(output);
+        System.out.println(output);
     }
 
     @Override
     public void periodic() {
-        double setpoint = 30;
+        double setpoint = 10;
         double output = getController().calculate(getMeasurement(), setpoint);
         /** DEBUG */
         // useOutput(output, setpoint);
-        // System.out.println("" + getMeasurement() + "      " + getRotations() + "         " + output);
-        // System.out.println("FF is" + ffpidController.calculateArm(getMeasurement()));
+        System.out.println("" + getMeasurement() + "      " + getRotations() + "         ");
+        System.out.println("FF is" + ffpidController.calculateArm(getMeasurement()));
         useOutput(output + ffpidController.calculateArm(getMeasurement()), setpoint);
     }
 
