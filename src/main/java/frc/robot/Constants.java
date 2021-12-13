@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
 import org.frc5587.lib.pid.PID;
-import org.frc5587.lib.controllers.FFPIDController;
+import org.frc5587.lib.controllers.FFController;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -53,16 +53,16 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final double K_S = 0.52458;//0.57447;
-        public static final double K_COS = 0.28918;//0.24835;
-        public static final double K_V = 0.015807;//0.015959;
-        public static final double K_A = 0.00014523;//0.00014283;
+        public static final double K_S = 0.58892;//<< RADIANS   //0.52458;//0.57447;
+        public static final double K_COS = 0.32112;//<< RADIANS //0.28918;//0.24835;
+        public static final double K_V = 0.89745;//<< RADIANS //0.015807;//0.015959;
+        public static final double K_A = 0.003158;//<< RADIANS //0.00014523;//0.00014283;
 
-        public static final double K_P = 0.0052384;//0.034222; // might be 0.41067
-        public static final double K_D = 0.0001757;//0.00036765; // might be 0.0044118
+        public static final double K_P = 0.0029528;//<< RADIANS //0.0052384;//0.034222; // might be 0.41067
+        public static final double K_D = 0;//0.00036765; // might be 0.0044118
 
         public static final PID ARM_PID = new PID(K_P, 0, K_D);
-        public static final FFPIDController FEED_FORWARD = new FFPIDController(K_S, K_COS, 0, K_V, K_A);
+        public static final FFController FEED_FORWARD = new FFController(K_S, K_COS, 0, K_V, K_A);
 
         public static final double ARM_SPEED_MULTIPLIER = 0.3;
         public static final double GEARING = 55.125;

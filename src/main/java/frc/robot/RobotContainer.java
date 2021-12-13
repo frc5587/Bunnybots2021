@@ -66,8 +66,9 @@ public class RobotContainer {
     private void configureButtonBindings() {
         POVButton dpadUp = new POVButton(xb, 0);
         POVButton dpadDown = new POVButton(xb, 180);
-        // Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
+        Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
+        dpadUp.whenActive(() -> arm.setAngleDegrees(10), arm);
         // dpadUp.whileActiveContinuous(arm::moveByFixedSpeed, arm).whenInactive(arm::stop, arm);
         // dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveFixedReversed, arm).whenInactive(arm::stop, arm);
     }

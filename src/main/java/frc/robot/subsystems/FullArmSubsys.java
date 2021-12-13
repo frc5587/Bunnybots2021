@@ -1,21 +1,30 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import org.frc5587.lib.controllers.FFPIDController;
+import org.frc5587.lib.controllers.FFController;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ArmConstants;
 
+/**
+* An arm subsystem that does not use a base class.
+* This is built on PIDSubsystem, and uses Feedforward calculations from FFController
+*/
 public class FullArmSubsys extends PIDSubsystem {
     private SpeedControllerGroup motorGroup;
     private WPI_TalonFX[] motors;
-    private FFPIDController ffpidController;
+    private FFController ffController;
+    private PIDController pidController;
+    private DigitalInput limitSwitch;
 
     public FullArmSubsys() {
         super(new PIDController(ArmConstants.ARM_PID.kP, ArmConstants.ARM_PID.kI, ArmConstants.ARM_PID.kD));
+        this.enable();
         /**
         * create motors in an array so they can be accessed individually if needed (encoders, config, etc.)
         * 
@@ -26,12 +35,15 @@ public class FullArmSubsys extends PIDSubsystem {
             new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)
         };
         motorGroup = new SpeedControllerGroup(motors);
+        pidController = getController();
+        pidController.enableContinuousInput(0, 100);
 
+        limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH);
         /**
         * use FFPIDController to calculate Feedforward
         * these values come from Constants. we won't use kG because it's for elevator Feedforward.
         */
-        ffpidController = new FFPIDController(
+        ffController = new FFController(
             ArmConstants.K_S, 
             ArmConstants.K_COS, 
             0, 
@@ -40,36 +52,37 @@ public class FullArmSubsys extends PIDSubsystem {
         );
     }
 
+    /**
+    * set every motor to break mode and invert it if needed. use integrated encoders.
+    */
     public void configureMotors() {
-        /**
-        * set every motor to break mode and invert it if needed.
-        */
         for(WPI_TalonFX motor : motors) {
             motor.configFactoryDefault();
             motor.setNeutralMode(NeutralMode.Brake);
             motor.setInverted(ArmConstants.MOTORS_INVERTED);
+            motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         }
     }
 
     /**
-    * @return the position of the arm in full rotations
-    * this accounts for gearing and encoder counts per revolution.
+    * @return the position of the arm in full rotations,
+    * accounting for gearing and encoder counts per revolution.
     */
     public double getRotations() {
-        return motors[0].getSelectedSensorPosition() / ArmConstants.ENCODER_CPR / ArmConstants.GEARING;
+        return (motors[0].getSelectedSensorPosition() / ArmConstants.ENCODER_CPR / ArmConstants.GEARING);
     }
 
     /**
-     * @return the position of the arm in degrees
-     * this accounts for gearing and encoder counts per revolution.
+     * @return the position of the arm in degrees,
+     * accounting for gearing and encoder counts per revolution.
      */
     public double getAngleDegrees() {
         return getRotations() * 360;
     }
 
     /**
-    * @return the position of the arm in radians
     * this should be used for most calculations (including Feedforward and getMeasurement)
+    * @return the position of the arm in radians.
     */
     public double getAngleRadians() {
         return Math.toRadians(getAngleDegrees());
@@ -80,6 +93,10 @@ public class FullArmSubsys extends PIDSubsystem {
     */
     public void set(double value) {
         motorGroup.set(value);
+    }
+
+    public void setAngleDegrees(double angle) {
+        pidController.setSetpoint(angle);
     }
 
     /**
@@ -103,21 +120,24 @@ public class FullArmSubsys extends PIDSubsystem {
         motorGroup.set(0);
     }
 
+    public boolean getLimitSwitchValue() {
+        return (ArmConstants.LIMIT_SWITCH_INVERTED ? !limitSwitch.get() : limitSwitch.get());
+    }
+
     @Override
     public void useOutput(double output, double setpoint) {
         set(output);
-        System.out.println(output);
     }
 
     @Override
     public void periodic() {
-        double setpoint = 10;
-        double output = getController().calculate(getMeasurement(), setpoint);
+        double ff = ffController.calculateArm(getMeasurement());
+        double output = getController().calculate(getMeasurement());
         /** DEBUG */
         // useOutput(output, setpoint);
         System.out.println("" + getMeasurement() + "      " + getRotations() + "         ");
-        System.out.println("FF is" + ffpidController.calculateArm(getMeasurement()));
-        useOutput(output + ffpidController.calculateArm(getMeasurement()), setpoint);
+        System.out.println("FF is" + ff);
+        useOutput(output + ff, getSetpoint());
     }
 
     @Override
