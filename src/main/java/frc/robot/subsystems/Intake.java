@@ -3,17 +3,18 @@ package frc.robot.subsystems;
 import frc.robot.Constants.IntakeConstants;
 import org.frc5587.lib.subsystems.SimpleMotorBase;
 
+import edu.wpi.first.wpilibj.SpeedController;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SimpleMotorBase {
-    private final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
-    private final CANSparkMax leftIntake = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushless);
+    private static final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
+    private static final CANSparkMax leftIntake = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushless);
 
-    // TODO What to replace null with? Create a SpeedControllerGroup() with the 2 motors? Array?
     public Intake() {
-        super(null, IntakeConstants.THROTTLE);
+        super(new SpeedController[]{rightIntake, leftIntake}, IntakeConstants.THROTTLE);
     }
 
     @Override
