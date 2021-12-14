@@ -52,6 +52,6 @@ public class Drivetrain extends DrivetrainBase {
     @Override
     public void periodic() {
         super.periodic();
-        System.out.println("X:  " + getPose() + "  Y:  " + getPose().getTranslation().getY() + "  R:  " + getHeading() + "  " + getPose().getRotation());
+        // System.out.println("X:  " + getPose() + "  Y:  " + getPose().getTranslation().getY() + "  R:  " + getHeading() + "  " + getPose().getRotation());
     }
 }

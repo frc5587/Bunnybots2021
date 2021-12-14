@@ -128,12 +128,13 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         // return null
-        return y2Meters.zeroOdometryOnStart(); //TODO this should move forward 2 meters
+        // return x2Meters.zeroOdometryOnStart(); //TODO this should move forward 2 meters
+        // return getRightBox.resetOdometryOnStart();
 
         // return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), dropOffRightBox, ejectCrate, backupAndCenter);
 
         // return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), dropOffRightBox, ejectCrate, new ParallelCommandGroup(getRightBox2, intakeCrate), ejectCrate, backupAndCenter2);
 
-        // return new SequentialCommandGroup(getRightBox, dropOffRightBox, backupAndCenter);
+        return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, backupAndCenter);
     }
 }

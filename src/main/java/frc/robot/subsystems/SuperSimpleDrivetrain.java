@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SuperSimpleDrivetrain extends SubsystemBase {
@@ -32,19 +33,6 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
 
     private final AHRS ahrs = new AHRS();
     private final DifferentialDriveOdometry odometry;
-    // WPI_TalonFX[] leftFollowers = new WPI_TalonFX[leftMotorIDs.length-1];
-    // WPI_TalonFX[] rightFollowers = new WPI_TalonFX[rightMotorIDs.length-1];
-
-    // public static DriveConstants constantsObj = new DriveConstants(
-    // DrivetrainConstants.TURN_FPID,
-    // DrivetrainConstants.TURN_PID_FORWARD_THROTTLE,
-    // DrivetrainConstants.TURN_PID_TOLERANCE_DEG,
-    // DrivetrainConstants.WHEEL_DIAMETER_METERS,
-    // DrivetrainConstants.HISTORY_LIMIT,
-    // DrivetrainConstants.INVERT_GYRO_DIRECTION,
-    // DrivetrainConstants.ENCODER_EDGES_PER_REV,
-    // DrivetrainConstants.GEARING
-    // );
 
     public SuperSimpleDrivetrain() {
         odometry = new DifferentialDriveOdometry(ahrs.getRotation2d());
@@ -81,8 +69,15 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
         super.periodic();
         odometry.update(ahrs.getRotation2d(), getLeftPositionMeters(), getRightPositionMeters());
 
-        System.out.println("X:  " + getPose() + "  Y:  " + getPose().getTranslation().getY() + "  R:  " + getHeading()
-                + "  " + getPose().getRotation());
+        SmartDashboard.putNumber("X", getPose().getTranslation().getX());
+        SmartDashboard.putNumber("Y", getPose().getTranslation().getY());
+        SmartDashboard.putNumber("R", getHeading());
+
+        SmartDashboard.putNumber("left v", getLeftVelocityMetersPerSecond());
+        SmartDashboard.putNumber("right v", getRightVelocityMetersPerSecond());
+
+        // System.out.println("X:  " + getPose() + "  Y:  " + getPose().getTranslation().getY() + "  R:  " + getHeading()
+        //         + "  " + getPose().getRotation());
     }
 
     public void resetEncoders() {
@@ -95,7 +90,7 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
     }
 
     private double getLeftPositionMeters() {
-        return applyEPR_Gearing_Distance(leftLeader.getSelectedSensorPosition());
+        return -applyEPR_Gearing_Distance(leftLeader.getSelectedSensorPosition());
     }
 
     private double getRightPositionMeters() {
@@ -103,11 +98,11 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
     }
 
     private double getLeftVelocityMetersPerSecond() {
-        return applyEPR_Gearing_Distance(leftLeader.getSelectedSensorVelocity());
+        return -applyEPR_Gearing_Distance(leftLeader.getSelectedSensorVelocity()) * 10;
     }
 
     private double getRightVelocityMetersPerSecond() {
-        return applyEPR_Gearing_Distance(rightLeader.getSelectedSensorVelocity());
+        return applyEPR_Gearing_Distance(rightLeader.getSelectedSensorVelocity()) * 10;
     }
 
     private double applyEPR_Gearing_Distance(double rawEncoderTicks) {
@@ -129,7 +124,7 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
     }
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
-        leftGroup.setVoltage(leftVolts);
+        leftGroup.setVoltage(-leftVolts);
         rightGroup.setVoltage(rightVolts); // TODO this might need to be negative or smth
         drive.feed();
     }

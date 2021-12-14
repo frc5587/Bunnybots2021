@@ -21,10 +21,10 @@ import edu.wpi.first.wpilibj.util.Units;
  */
 public final class Constants {
     public static final class AutoConstants {
-        public static final double KS = 0.602;
-        public static final double KV = 1.18;
-        public static final double KA = 0.0965;
-        public static final double KP = 2.18;
+        public static final double KS = 0.61049;//0.607;//0.614;// 0.60429;//0.602;
+        public static final double KV = 2.4818;//2.5;//2.4847;//2.4858;//1.18;
+        public static final double KA = 0.23997;//0.219;//0.25027;//0.24717;//0.0965;
+        public static final double KP = 0;//2.17;//3.1067;//3.1494;//2.18;
         public static final double KD = 0;
         public static final double TRACK_WIDTH = 0.683;
 
@@ -69,6 +69,9 @@ public final class Constants {
         public static final double GEARING = (54/20) * (50/12);
 
         public static final double CRAWL_THROTTLE = 0.1;
+
+        public static final double VELOCITY_COEFFICIENT = 10; // CTRE measures velocity in units per 100ms, so this makes it units per 1s
+
     }
 
     public static final class LEDConstants {
@@ -90,8 +93,8 @@ public final class Constants {
         // motor speeds
         public static final double THROTTLE = 0.5;
 
-        public static final int PDP_SLOT_1 = -1; // TODO update with real pdp slot
-        public static final int PDP_SLOT_2 = -1; // TODO update with real pdp slot
+        public static final int PDP_SLOT_1 = 2; // TODO: check if these are correct by substituting them for other slots
+        public static final int PDP_SLOT_2 = 3; // TODO: check if these are correct by substituting them for other slots
 
         public static final double STALL_VELOCITY_CURRENT_THRESHOLD = 1;    // TODO this is prolly wrong
         public static final double STALL_ACCELERATION_THRESHOLD = 1;        // TODO this is prolly wrong

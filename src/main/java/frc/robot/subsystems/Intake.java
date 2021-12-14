@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -20,7 +21,7 @@ public class Intake extends SubsystemBase {
 
     private final SpeedControllerGroup intakeMotors = new SpeedControllerGroup(leftIntake, rightIntake);
 
-    private final PowerDistributionPanel pdp = new PowerDistributionPanel(0);
+    private final PowerDistributionPanel pdp = new PowerDistributionPanel();
 
     private double lastVelocity, nowVelocity, lastSet = 0;
 
@@ -72,9 +73,19 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         lastVelocity = nowVelocity;
         nowVelocity = getAverageVelocity();
+
+        SmartDashboard.putNumber("Current", getAverageCurrent());
+        SmartDashboard.putNumber("Velocity", getAverageVelocity());
+        SmartDashboard.putNumber("Acceleration", getAbsoluteAverageAcceleration());
+        SmartDashboard.putNumber("ratio", nowVelocity / getAverageCurrent());
+
+        SmartDashboard.putNumber("Stalled", isStalled()? 1:0);
     }
 
+
+
     private double getAverageCurrent() {
+        // System.out.println("PDP: " + pdp.getCurrent(IntakeConstants.PDP_SLOT_1) + "    "+ pdp.getTemperature() + "   " + pdp.getTotalCurrent() + "   " + pdp.getVoltage());
         return (pdp.getCurrent(IntakeConstants.PDP_SLOT_1) + pdp.getCurrent(IntakeConstants.PDP_SLOT_2)) / 2;
     }
 
