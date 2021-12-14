@@ -7,25 +7,36 @@ import org.frc5587.lib.controllers.FFController;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import frc.robot.Constants.ArmConstants;
 
 /**
 * An arm subsystem that does not use a base class.
-* This is built on {@link PIDSubsystem} and uses Feedforward calculations from FFController
+* This is built on {@link ProfiledPIDSubsystem} and uses Feedforward calculations from FFController
 */
-public class FullArmSubsys extends PIDSubsystem {
+public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
     private SpeedControllerGroup motorGroup;
     private WPI_TalonFX[] motors;
     private FFController ffController;
-    private PIDController pidController;
+    private ProfiledPIDController pidController;
     private DigitalInput limitSwitch;
 
-    public FullArmSubsys() {
-        super(new PIDController(ArmConstants.ARM_PID.kP, ArmConstants.ARM_PID.kI, ArmConstants.ARM_PID.kD));
+    public FullArmSubsysTrapezoid() {
+        super(
+            new ProfiledPIDController(
+                ArmConstants.ARM_PID.kP, 
+                ArmConstants.ARM_PID.kI, 
+                ArmConstants.ARM_PID.kD, 
+                new TrapezoidProfile.Constraints(
+                    ArmConstants.VELOCITY_CONSTRAINT,
+                    ArmConstants.ACCELERATION_CONSTRAINT
+                )
+            )
+        );
         this.enable();
         /**
         * create motors in an array so they can be accessed individually if needed (encoders, config, etc.)
@@ -71,7 +82,13 @@ public class FullArmSubsys extends PIDSubsystem {
     * accounting for gearing and encoder counts per revolution.
     */
     public double getRotations() {
-        return (motors[0].getSelectedSensorPosition() / ArmConstants.ENCODER_CPR / ArmConstants.GEARING);
+        try {
+            return (motors[0].getSelectedSensorPosition() / ArmConstants.ENCODER_CPR / ArmConstants.GEARING);
+        }
+        catch(NullPointerException e) {
+            System.out.println(e + " Could not get Encoder");
+            return 0;
+        }
     }
 
     /**
@@ -102,7 +119,7 @@ public class FullArmSubsys extends PIDSubsystem {
     }
 
     public void setAngleDegrees(double angle) {
-        pidController.setSetpoint(angle);
+        pidController.setGoal(Math.toRadians(angle));
     }
 
     /**
@@ -117,7 +134,6 @@ public class FullArmSubsys extends PIDSubsystem {
     */
     public void resetEncoders() {
         motors[0].setSelectedSensorPosition(1254);
-        // System.out.println("*********" + motors[0].getSelectedSensorPosition());
     }
 
     /**
@@ -132,24 +148,30 @@ public class FullArmSubsys extends PIDSubsystem {
     }
 
     @Override
-    public void useOutput(double output, double setpoint) {
-        System.out.println("OUTPUT: " + output);
+    public void useOutput(double output, TrapezoidProfile.State setpoint) {
+        SmartDashboard.putNumber("OUTPUT USED", output);
+        SmartDashboard.putNumber("SETPOINT USED", setpoint.position);
+        SmartDashboard.putBoolean("AT SETPOINT", pidController.atGoal());
         set(output);
     }
 
     @Override
     public void periodic() {
-        double setpoint = Math.toRadians(40);
-        double ff = ffController.calculateArm(getMeasurement());
-        double output = getController().calculate(getMeasurement(), setpoint);
+        double goal = Math.toRadians(40);
+        pidController.setGoal(goal);
+        TrapezoidProfile.State goalState = pidController.getGoal();
+        double ff = ffController.calculateArm(getMeasurement()/*, getVelocityRadians()*/);
+        // double ff = ffController.calculateArm(goalState.position);
+        double output = pidController.calculate(getMeasurement(), goalState.position);
         SmartDashboard.putNumber("Angle in Radians", getMeasurement());
         SmartDashboard.putNumber("Angle in Degrees", getAngleDegrees());
         SmartDashboard.putNumber("FeedForward", ff);
-        SmartDashboard.putNumber("Setpoint", getSetpoint());
         SmartDashboard.putNumber("Output calculated", output);
-        SmartDashboard.putNumber("Output used", output + ff);
+        SmartDashboard.putNumber("Output passed", output + ff);
+        SmartDashboard.putNumber("Goal", goalState.position);
         Shuffleboard.update();
-        useOutput(ff + output, getSetpoint());
+        // super.periodic();
+        useOutput(ff + output, pidController.getGoal());
     }
 
     @Override

@@ -53,17 +53,20 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final double K_S = 0.58892;//<< RADIANS   //0.52458;//0.57447;
-        public static final double K_COS = 0.32112;//<< RADIANS //0.28918;//0.24835;
-        public static final double K_V = 0.89745;//<< RADIANS //0.015807;//0.015959;
-        public static final double K_A = 0.003158;//<< RADIANS //0.00014523;//0.00014283;
+        public static final double K_S = 0.5162;//<< RADIANS   //0.52458;//0.57447;
+        public static final double K_COS = 0.31227;//<< RADIANS //0.28918;//0.24835;
+        public static final double K_V = 0.90019;//<< RADIANS //0.015807;//0.015959;
+        public static final double K_A = 0.0083556;//<< RADIANS //0.00014523;//0.00014283;
 
-        public static final double K_P = 0.0029528;//<< RADIANS //0.0052384;//0.034222; // might be 0.41067
-        public static final double K_D = 0;//0.00036765; // might be 0.0044118
+        public static final double K_P = 0.30137;//<< RADIANS //0.0052384;//0.034222; // might be 0.41067
+        public static final double K_D = 0.010225;//0.00036765; // might be 0.0044118
 
         public static final PID ARM_PID = new PID(K_P, 0, K_D);
         public static final FFController FEED_FORWARD = new FFController(K_S, K_COS, 0, K_V, K_A);
 
+        public static final double VELOCITY_CONSTRAINT = 1;
+        public static final double ACCELERATION_CONSTRAINT = 5;
+        
         public static final double ARM_SPEED_MULTIPLIER = 0.3;
         public static final double GEARING = 55.125;
         public static final int ENCODER_CPR = 2048;
@@ -74,7 +77,7 @@ public final class Constants {
         public static final int ARM_FOLLOWER = 21;
 
         public static final boolean MOTORS_INVERTED = false;
-        public static final boolean LIMIT_SWITCH_INVERTED = true;
+        public static final boolean LIMIT_SWITCH_INVERTED = false;
     }
     public static final class LEDConstants {
         public static final int PWM_PORT = 0;
