@@ -1,27 +1,23 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants.IntakeConstants;
+import org.frc5587.lib.subsystems.SimpleMotorBase;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
-
-
-public class Intake extends SubsystemBase {
+public class Intake extends SimpleMotorBase {
     private final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
     private final CANSparkMax leftIntake = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushless);
 
-    private final SpeedControllerGroup intakeMotors = new SpeedControllerGroup(leftIntake, rightIntake);
-
+    // TODO What to replace null with? Create a SpeedControllerGroup() with the 2 motors? Array?
     public Intake() {
-        super();
-
-        configureSparkMax();
+        super(null, IntakeConstants.THROTTLE);
     }
 
-    private void configureSparkMax() {
+    @Override
+    public void configureMotors() {
         rightIntake.restoreFactoryDefaults();
         leftIntake.restoreFactoryDefaults();
 
@@ -33,26 +29,5 @@ public class Intake extends SubsystemBase {
 
         rightIntake.setIdleMode(IdleMode.kBrake);
         leftIntake.setIdleMode(IdleMode.kBrake);
-    }
-
-    /**
-     * Moves intake forwards
-     */
-    public void forward() {
-        intakeMotors.set(IntakeConstants.THROTTLE);
-    }
-
-    /**
-     * Moves intake backwards
-     */
-    public void backward() {
-        intakeMotors.set(-IntakeConstants.THROTTLE/1.5);
-    }
-
-    /**
-     * Stops intake
-     */
-    public void stop() {
-        intakeMotors.set(0);
     }
 }
