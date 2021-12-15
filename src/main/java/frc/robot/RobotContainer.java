@@ -12,16 +12,16 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
-
 import frc.robot.Constants.LEDConstants;
+import frc.robot.subsystems.FullArmSubsysTrapezoid;
 
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -39,18 +39,20 @@ public class RobotContainer {
     private final Drivetrain drivetrain = new Drivetrain();
     private final Intake intake = new Intake();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
+    private final FullArmSubsysTrapezoid arm = new FullArmSubsysTrapezoid();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    // private final ArmMovementThrottle armMovementThrottle = new ArmMovementThrottle(arm, () -> xb.getY(Hand.kRight));
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
             LEDConstants.LED_LENGTH);
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         // make drivetrain use arcadeDrive to drive
         drivetrain.setDefaultCommand(arcadeDrive);
+        // make the arm use the xbox joystick to move
         // Configure the button bindings
         configureButtonBindings();
 
@@ -74,7 +76,22 @@ public class RobotContainer {
         JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
         // Left Trigger for Intake & Bunny Dumper controls
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
+        // DPad Up for higher arm setpoint
+        POVButton dpadUp = new POVButton(xboxController, 0);
+        // DPad Down for lower arm setpoint
+        POVButton dpadDown = new POVButton(xboxController, 180);
+        // arm limit switch
+        Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
+        /**
+         * Bunny Dumper
+         */
+        
+        // when b button and left trigger are pressed together, extend the pistons. when
+        // the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
+                .whenInactive(bunnyDumper::retract, bunnyDumper);
+                
         /*
          * Intake
          */
@@ -86,16 +103,32 @@ public class RobotContainer {
         // button & left trigger are inactive - stop.
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
 
-        /*
-         * Bunny Dumper
-         */
+        armLimitSwitch.whenActive(arm::resetEncoders);
 
-        // when b button and left trigger are pressed together, extend the pistons. when
-        // the two buttons are released, retract the pistons
-        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract,
-                bunnyDumper);
+        dpadUp.whenPressed(
+            () -> {
+                arm.getController().setGoal(Math.toRadians(60));
+            },
+            arm
+        );
 
-        // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
+        dpadDown.whenPressed(
+            () -> {
+                arm.getController().setGoal(Math.toRadians(5));
+            },
+            arm
+        );
+
+        // xButton.whenPressed(
+        //     () -> {
+        //         arm.getController().setGoal(Math.toRadians(80));
+        //         SmartDashboard.putNumber("GOAL SET TO", arm.getController().getGoal().position);
+        //         SmartDashboard.putBoolean("PIDENABLED", arm.isEnabled());
+        //     },
+        //     arm
+        // );
+        // dpadUp.whileActiveContinuous(arm::moveByFixedSpeed, arm).whenInactive(arm::stop, arm);
+        // dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveFixedReversed, arm).whenInactive(arm::stop, arm);
     }
 
     /**
