@@ -21,6 +21,7 @@ import frc.robot.Constants.LEDConstants;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -46,6 +47,7 @@ public class RobotContainer {
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
             LEDConstants.LED_LENGTH);
+    private int i = 0;
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -70,27 +72,33 @@ public class RobotContainer {
     private void configureButtonBindings() {
         POVButton dpadUp = new POVButton(xb, 0);
         POVButton dpadDown = new POVButton(xb, 180);
-        JoystickButton bButton = new JoystickButton(xb, XboxController.Button.kX.value);
+        JoystickButton xButton = new JoystickButton(xb, XboxController.Button.kX.value);
         Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
         armLimitSwitch.whenActive(arm::resetEncoders);
+
         dpadUp.whenPressed(
             () -> {
-                arm.setGoal(1);
-                arm.enable();
-                },
+                arm.getController().setGoal(Math.toRadians(60));
+            },
             arm
         );
 
         dpadDown.whenPressed(
             () -> {
-                arm.setGoal(0.069);
-                arm.enable();
-                },
+                arm.getController().setGoal(Math.toRadians(5));
+            },
             arm
         );
 
-        bButton.whenPressed(() -> {arm.stop(); arm.disable();}, arm);
+        // xButton.whenPressed(
+        //     () -> {
+        //         arm.getController().setGoal(Math.toRadians(80));
+        //         SmartDashboard.putNumber("GOAL SET TO", arm.getController().getGoal().position);
+        //         SmartDashboard.putBoolean("PIDENABLED", arm.isEnabled());
+        //     },
+        //     arm
+        // );
         // dpadUp.whileActiveContinuous(arm::moveByFixedSpeed, arm).whenInactive(arm::stop, arm);
         // dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveFixedReversed, arm).whenInactive(arm::stop, arm);
     }

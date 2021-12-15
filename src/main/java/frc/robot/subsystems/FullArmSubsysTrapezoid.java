@@ -22,7 +22,7 @@ public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
     private SpeedControllerGroup motorGroup;
     private WPI_TalonFX[] motors;
     private FFController ffController;
-    private ProfiledPIDController pidController;
+    protected ProfiledPIDController pidController;
     private DigitalInput limitSwitch;
 
     public FullArmSubsysTrapezoid() {
@@ -37,6 +37,7 @@ public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
                 )
             )
         );
+        
         this.enable();
         /**
         * create motors in an array so they can be accessed individually if needed (encoders, config, etc.)
@@ -63,6 +64,7 @@ public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
             ArmConstants.K_V,
             ArmConstants.K_A
         );
+        SmartDashboard.putBoolean("OUTPUT ON?", true);
     }
 
     /**
@@ -133,7 +135,7 @@ public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
     * sets the leader's encoder to 0
     */
     public void resetEncoders() {
-        motors[0].setSelectedSensorPosition(1254);
+        motors[0].setSelectedSensorPosition(313);
     }
 
     /**
@@ -149,18 +151,34 @@ public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
 
     @Override
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
+        // double ff = ffController.calculateArm(getMeasurement(), getVelocityRadians());
+        // SmartDashboard.putNumber("FF", ff);
         SmartDashboard.putNumber("OUTPUT USED", output);
         SmartDashboard.putNumber("SETPOINT USED", setpoint.position);
+        SmartDashboard.putNumber("GOAL USED", pidController.getGoal().position);
         SmartDashboard.putBoolean("AT SETPOINT", pidController.atGoal());
-        set(output);
+
+        if(getLimitSwitchValue() && output < 0) {
+            setVoltage(0);
+            // pidController.setGoal(Math.toRadians(5));
+        }
+
+        else if(!getLimitSwitchValue() && getMeasurement() > Math.toRadians(65) && output > 0) {
+            setVoltage(0);
+            // pidController.setGoal(70);
+        }
+
+        else {
+            setVoltage(output);
+        }
     }
 
     @Override
     public void periodic() {
-        double goal = Math.toRadians(40);
-        pidController.setGoal(goal);
+        // double goal = Math.toRadians(40);
+        // pidController.setGoal(goal);
         TrapezoidProfile.State goalState = pidController.getGoal();
-        double ff = ffController.calculateArm(getMeasurement()/*, getVelocityRadians()*/);
+        double ff = ffController.calculateArm(goalState.position, goalState.velocity);
         // double ff = ffController.calculateArm(goalState.position);
         double output = pidController.calculate(getMeasurement(), goalState.position);
         SmartDashboard.putNumber("Angle in Radians", getMeasurement());
@@ -169,9 +187,15 @@ public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
         SmartDashboard.putNumber("Output calculated", output);
         SmartDashboard.putNumber("Output passed", output + ff);
         SmartDashboard.putNumber("Goal", goalState.position);
+        System.out.println(SmartDashboard.getBoolean("OUTPUT ON?", true));
         Shuffleboard.update();
-        // super.periodic();
-        useOutput(ff + output, pidController.getGoal());
+        if(SmartDashboard.getBoolean("OUTPUT ON?", true)) {
+            useOutput(ff + output, pidController.getGoal());
+        }
+        else {
+            useOutput(0, new TrapezoidProfile.State());
+        }
+        // useOutput(ff + output, pidController.getGoal());
     }
 
     @Override
