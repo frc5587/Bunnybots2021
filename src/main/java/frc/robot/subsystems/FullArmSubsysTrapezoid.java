@@ -160,12 +160,10 @@ public class FullArmSubsysTrapezoid extends ProfiledPIDSubsystem {
 
         if(getLimitSwitchValue() && output < 0) {
             setVoltage(0);
-            // pidController.setGoal(Math.toRadians(5));
         }
 
         else if(!getLimitSwitchValue() && getMeasurement() > Math.toRadians(65) && output > 0) {
             setVoltage(0);
-            // pidController.setGoal(70);
         }
 
         else {

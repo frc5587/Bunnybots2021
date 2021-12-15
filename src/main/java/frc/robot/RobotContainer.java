@@ -81,8 +81,8 @@ public class RobotContainer {
         POVButton dpadUp = new POVButton(xboxController, 0);
         // DPad Down for lower arm setpoint
         POVButton dpadDown = new POVButton(xboxController, 180);
-        // X Button for manual arm control
-        JoystickButton xButton = new JoystickButton(xboxController, XboxController.Button.kX.value);
+        // right trigger for manual arm control
+        Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
         // arm limit switch
         Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
@@ -120,7 +120,7 @@ public class RobotContainer {
         );
 
         // while X is held
-        xButton.whileActiveContinuous(
+        rightTrigger.whileActiveContinuous(
             () -> {
                 // make sure useOutput() is not being used by periodic()
                 SmartDashboard.putBoolean("OUTPUT ON?", false);
