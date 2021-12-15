@@ -75,6 +75,15 @@ public class RobotContainer {
         // Left Trigger for Intake & Bunny Dumper controls
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
 
+        /**
+         * Bunny Dumper
+         */
+        
+        // when b button and left trigger are pressed together, extend the pistons. when
+        // the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
+                .whenInactive(bunnyDumper::retract, bunnyDumper);
+                
         /*
          * Intake
          */
@@ -85,17 +94,6 @@ public class RobotContainer {
         // when y button & left trigger are active, move intake backwards | when the y
         // button & left trigger are inactive - stop.
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
-
-        /*
-         * Bunny Dumper
-         */
-
-        // when b button and left trigger are pressed together, extend the pistons. when
-        // the two buttons are released, retract the pistons
-        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract,
-                bunnyDumper);
-
-        // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
     }
 
     /**
