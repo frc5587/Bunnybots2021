@@ -12,12 +12,11 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.Constants.LEDConstants;
 import frc.robot.subsystems.FullArmSubsysTrapezoid;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -44,8 +43,10 @@ public class RobotContainer {
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // private final ArmMovementThrottle armMovementThrottle = new ArmMovementThrottle(arm, () -> xb.getY(Hand.kRight));
     // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
-            LEDConstants.LED_LENGTH);
+    private final AddressableLEDController ledController = new AddressableLEDController(
+        Constants.LEDConstants.PWM_PORT,
+        Constants.LEDConstants.LED_LENGTH
+    );
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -80,6 +81,8 @@ public class RobotContainer {
         POVButton dpadUp = new POVButton(xboxController, 0);
         // DPad Down for lower arm setpoint
         POVButton dpadDown = new POVButton(xboxController, 180);
+        // X Button for manual arm control
+        JoystickButton xButton = new JoystickButton(xboxController, XboxController.Button.kX.value);
         // arm limit switch
         Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
@@ -103,32 +106,32 @@ public class RobotContainer {
         // button & left trigger are inactive - stop.
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
 
+        /* 
+         * Arm
+         */ 
         armLimitSwitch.whenActive(arm::resetEncoders);
 
         dpadUp.whenPressed(
-            () -> {
-                arm.getController().setGoal(Math.toRadians(60));
-            },
-            arm
+            () -> arm.getController().setGoal(Constants.ArmConstants.ARM_HIGHER_SETPOINT), arm
         );
 
         dpadDown.whenPressed(
-            () -> {
-                arm.getController().setGoal(Math.toRadians(5));
-            },
-            arm
+            () -> arm.getController().setGoal(Constants.ArmConstants.ARM_LOWER_SETPOINT), arm
         );
 
-        // xButton.whenPressed(
-        //     () -> {
-        //         arm.getController().setGoal(Math.toRadians(80));
-        //         SmartDashboard.putNumber("GOAL SET TO", arm.getController().getGoal().position);
-        //         SmartDashboard.putBoolean("PIDENABLED", arm.isEnabled());
-        //     },
-        //     arm
-        // );
-        // dpadUp.whileActiveContinuous(arm::moveByFixedSpeed, arm).whenInactive(arm::stop, arm);
-        // dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveFixedReversed, arm).whenInactive(arm::stop, arm);
+        // while X is held
+        xButton.whileActiveContinuous(
+            () -> {
+                // make sure useOutput() is not being used by periodic()
+                SmartDashboard.putBoolean("OUTPUT ON?", false);
+                // set the arm to the output of the right xbox controller stick
+                arm.set(
+                    xboxController.getY(Hand.kRight) * Constants.ArmConstants.ARM_SPEED_MULTIPLIER
+                );
+            },
+        arm)
+        //when X is released, turn output back on.
+        .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
     }
 
     /**

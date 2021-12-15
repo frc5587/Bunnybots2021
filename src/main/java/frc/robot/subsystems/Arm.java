@@ -12,7 +12,6 @@ public class Arm extends PivotingArmBase {
     public static WPI_TalonFX[] motors = new WPI_TalonFX[]{new WPI_TalonFX(ArmConstants.ARM_LEADER), new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)};
     public static SpeedControllerGroup motorGroup = new SpeedControllerGroup(motors);
     private WPI_TalonFX leader = motors[0];
-    private WPI_TalonFX[] followers = new WPI_TalonFX[]{motors[1]};
     private DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH);
 
     public static FPIDConstants constants = new FPIDConstants(
