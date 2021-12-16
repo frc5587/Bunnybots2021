@@ -12,7 +12,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.FullArmSubsysTrapezoid;
+import frc.robot.subsystems.ArmTrapezoid;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -38,10 +38,9 @@ public class RobotContainer {
     private final Drivetrain drivetrain = new Drivetrain();
     private final Intake intake = new Intake();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
-    private final FullArmSubsysTrapezoid arm = new FullArmSubsysTrapezoid();
+    private final ArmTrapezoid arm = new ArmTrapezoid();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
-    // private final ArmMovementThrottle armMovementThrottle = new ArmMovementThrottle(arm, () -> xb.getY(Hand.kRight));
     // Others
     private final AddressableLEDController ledController = new AddressableLEDController(
         Constants.LEDConstants.PWM_PORT,
@@ -53,7 +52,6 @@ public class RobotContainer {
     public RobotContainer() {
         // make drivetrain use arcadeDrive to drive
         drivetrain.setDefaultCommand(arcadeDrive);
-        // make the arm use the xbox joystick to move
         // Configure the button bindings
         configureButtonBindings();
 
@@ -112,26 +110,26 @@ public class RobotContainer {
         armLimitSwitch.whenActive(arm::resetEncoders);
 
         dpadUp.whenPressed(
-            () -> arm.getController().setGoal(Constants.ArmConstants.ARM_HIGHER_SETPOINT), arm
+            () -> arm.getController().setGoal(Constants.ArmConstants.HIGHER_SETPOINT), arm
         );
 
         dpadDown.whenPressed(
-            () -> arm.getController().setGoal(Constants.ArmConstants.ARM_LOWER_SETPOINT), arm
+            () -> arm.getController().setGoal(Constants.ArmConstants.LOWER_SETPOINT), arm
         );
 
         // while X is held
-        rightTrigger.whileActiveContinuous(
-            () -> {
-                // make sure useOutput() is not being used by periodic()
-                SmartDashboard.putBoolean("OUTPUT ON?", false);
-                // set the arm to the output of the right xbox controller stick
-                arm.set(
-                    xboxController.getY(Hand.kRight) * Constants.ArmConstants.ARM_SPEED_MULTIPLIER
-                );
-            },
-        arm)
-        //when X is released, turn output back on.
-        .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
+        // rightTrigger.whileActiveContinuous(
+        //     () -> {
+        //         // make sure useOutput() is not being used by periodic()
+        //         SmartDashboard.putBoolean("OUTPUT ON?", false);
+        //         // set the arm to the output of the right xbox controller stick
+        //         arm.set(
+        //             xboxController.getY(Hand.kRight) * Constants.ArmConstants.ARM_SPEED_MULTIPLIER
+        //         );
+        //     },
+        // arm)
+        // //when X is released, turn output back on.
+        // .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
     }
 
     /**

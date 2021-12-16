@@ -53,26 +53,29 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
+        // PID constants
         public static final double K_P = 3.5415;
         public static final double K_D = 0.10184;
         public static final PID ARM_PID = new PID(K_P, 0, K_D);
+        public static final double VELOCITY_CONSTRAINT = 5;
+        public static final double ACCELERATION_CONSTRAINT = 10;
 
+        // Feedforward constants
         public static final double K_S = 0.5162;
         public static final double K_COS = 0.24835;
         public static final double K_V = 0.90019;
         public static final double K_A = 0.0083556;
         public static final FFController FEED_FORWARD = new FFController(K_S, K_COS, 0, K_V, K_A);
 
-        public static final double VELOCITY_CONSTRAINT = 5;
-        public static final double ACCELERATION_CONSTRAINT = 10;
-        
+        // encoder calculation constants
         public static final double ARM_SPEED_MULTIPLIER = 0.3;
         public static final double GEARING = 55.125;
         public static final int ENCODER_CPR = 2048;
-        
-        public static final double ARM_LOWER_SETPOINT = Math.toRadians(5);
-        public static final double ARM_HIGHER_SETPOINT = Math.toRadians(60);
+        public static final double LOWER_SETPOINT = Math.toRadians(5);
+        public static final double HIGHER_SETPOINT = Math.toRadians(60);
+        public static final int ZERO_OFFSET_TICKS = 313;
 
+        // ports
         public static final int LIMIT_SWITCH = 0;
         public static final int ARM_LEADER = 20;
         public static final int ARM_FOLLOWER = 21;
@@ -80,6 +83,7 @@ public final class Constants {
         public static final boolean MOTORS_INVERTED = false;
         public static final boolean LIMIT_SWITCH_INVERTED = false;
     }
+
     public static final class LEDConstants {
         public static final int PWM_PORT = 0;
         public static final int LED_LENGTH = 300; 
