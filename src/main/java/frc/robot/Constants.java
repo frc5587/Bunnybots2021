@@ -28,8 +28,8 @@ public final class Constants {
         public static final double KD = 0;
         public static final double TRACK_WIDTH = 0.683;
 
-        public static final double MAXIMUM_VELOCITY = 3; // m/s
-        public static final double MAXIMUM_ACCELERATION = 3; // m/s^2
+        public static final double MAXIMUM_VELOCITY = 1; // m/s
+        public static final double MAXIMUM_ACCELERATION = 1; // m/s^2
 
         public static final DifferentialDriveKinematics DRIVETRAIN_KINEMATICS = new DifferentialDriveKinematics(
                 TRACK_WIDTH);
@@ -62,11 +62,11 @@ public final class Constants {
     
         public static final int TICKS_PER_REV = 8192;
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
-        public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2;
+        // public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2;
         public static final int HISTORY_LIMIT = 32;
 
         public static final int ENCODER_EDGES_PER_REV = 2048;
-        public static final double GEARING = (54/20) * (50/12);
+        public static final double GEARING = (54./20.) * (50./12.);
 
         public static final double CRAWL_THROTTLE = 0.1;
 
