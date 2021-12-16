@@ -12,7 +12,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ArmTrapezoid;
+import frc.robot.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -38,7 +38,7 @@ public class RobotContainer {
     private final Drivetrain drivetrain = new Drivetrain();
     private final Intake intake = new Intake();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
-    private final ArmTrapezoid arm = new ArmTrapezoid();
+    private final Arm arm = new Arm();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     // Others

@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import frc.robot.Constants.ArmConstants;
 
 /**
-* An arm subsystem with Trapezoidal PID and Feedforward control.
-* This is built on {@link ProfiledPIDSubsystem} and uses Feedforward calculations from FFController
+* A full arm subsystem with Trapezoidal PID and Feedforward control.
+* This is built on {@link ProfiledPIDSubsystem} and uses Feedforward calculations from FFController.
 */
 public class ArmTrapezoid extends ProfiledPIDSubsystem {
     private SpeedControllerGroup motorGroup;
@@ -55,13 +55,7 @@ public class ArmTrapezoid extends ProfiledPIDSubsystem {
         * Use FFController to calculate Feedforward
         * These values come from Constants. We won't use kG because it's for elevator Feedforward.
         */
-        ffController = new FFController(
-            ArmConstants.K_S, 
-            ArmConstants.K_COS, 
-            0, 
-            ArmConstants.K_V,
-            ArmConstants.K_A
-        );
+        ffController = ArmConstants.FEED_FORWARD;
         /** turn ON periodic's use of useOutput */
         SmartDashboard.putBoolean("OUTPUT ON?", true);
     }
@@ -104,7 +98,7 @@ public class ArmTrapezoid extends ProfiledPIDSubsystem {
     * @return the position of the arm in radians.
     */
     public double getAngleRadians() {
-        return Math.toRadians(getAngleDegrees());
+        return getRotations() * 2 * Math.PI;
     }
 
     /**

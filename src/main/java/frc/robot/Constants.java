@@ -7,6 +7,9 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.pid.FPID;
 import org.frc5587.lib.pid.PID;
+
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
+
 import org.frc5587.lib.controllers.FFController;
 
 /**
@@ -59,6 +62,10 @@ public final class Constants {
         public static final PID ARM_PID = new PID(K_P, 0, K_D);
         public static final double VELOCITY_CONSTRAINT = 5;
         public static final double ACCELERATION_CONSTRAINT = 10;
+        public static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(
+            VELOCITY_CONSTRAINT,
+            ACCELERATION_CONSTRAINT
+        );
 
         // Feedforward constants
         public static final double K_S = 0.5162;

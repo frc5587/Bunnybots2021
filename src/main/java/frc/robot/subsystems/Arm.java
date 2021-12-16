@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.ArmConstants;
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import org.frc5587.lib.subsystems.PivotingArmBase;
@@ -17,9 +19,13 @@ public class Arm extends PivotingArmBase {
     public static FPIDConstants constants = new FPIDConstants(
         ArmConstants.ARM_SPEED_MULTIPLIER,
         ArmConstants.GEARING,
+        ArmConstants.ZERO_OFFSET_TICKS,
         ArmConstants.ENCODER_CPR,
+        ArmConstants.LIMIT_SWITCH,
+        ArmConstants.LIMIT_SWITCH_INVERTED,
         ArmConstants.ARM_PID,
-        ArmConstants.FEED_FORWARD
+        ArmConstants.FEED_FORWARD,
+        ArmConstants.CONSTRAINTS
     );
     
     public Arm() {
@@ -36,12 +42,12 @@ public class Arm extends PivotingArmBase {
     
     @Override
     public double getEncoderPosition() {
-        return -this.leader.getSelectedSensorPosition();
+        return this.leader.getSelectedSensorPosition();
     }
 
     @Override
     public double getEncoderVelocity() {
-        return -this.leader.getSelectedSensorVelocity();
+        return this.leader.getSelectedSensorVelocity();
     }
 
     @Override
@@ -56,6 +62,7 @@ public class Arm extends PivotingArmBase {
                 motor.configFactoryDefault();
                 motor.setNeutralMode(NeutralMode.Brake);
                 motor.setInverted(ArmConstants.MOTORS_INVERTED);
+                motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
             }
         }
         catch(NullPointerException e) {
