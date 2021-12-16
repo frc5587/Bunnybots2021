@@ -19,6 +19,7 @@ public class Arm extends PivotingArmBase {
     public static FPIDConstants constants = new FPIDConstants(
         ArmConstants.ARM_SPEED_MULTIPLIER,
         ArmConstants.GEARING,
+        ArmConstants.SOFT_LIMITS,
         ArmConstants.ZERO_OFFSET_TICKS,
         ArmConstants.ENCODER_CPR,
         ArmConstants.LIMIT_SWITCH,
