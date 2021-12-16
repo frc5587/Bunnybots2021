@@ -5,8 +5,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants.DrivetrainConstants;
-import org.frc5587.lib.subsystems.DrivetrainBase;
-import org.frc5587.lib.subsystems.DrivetrainBase.DriveConstants;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
