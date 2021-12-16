@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 public class Arm extends PivotingArmBase {
-    public static WPI_TalonFX[] motors = new WPI_TalonFX[]{new WPI_TalonFX(ArmConstants.ARM_LEADER), new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)};
-    public static SpeedControllerGroup motorGroup = new SpeedControllerGroup(motors);
-    private WPI_TalonFX leader = motors[0];
-    private DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH);
+    public WPI_TalonFX[] motors;
+    // public SpeedControllerGroup motorGroup = new SpeedControllerGroup(motors);
+    // private WPI_TalonFX leader = motors[0];
+    // private DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH);
 
     public static FPIDConstants constants = new FPIDConstants(
         ArmConstants.ARM_SPEED_MULTIPLIER,
@@ -28,9 +28,18 @@ public class Arm extends PivotingArmBase {
         ArmConstants.FEED_FORWARD,
         ArmConstants.CONSTRAINTS
     );
-    
+
     public Arm() {
-        super(constants, motorGroup);
+        this(new WPI_TalonFX[]{new WPI_TalonFX(ArmConstants.ARM_LEADER), new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)});
+    }
+    
+    public Arm(WPI_TalonFX[] motors) {
+        super(constants, new SpeedControllerGroup(motors));
+
+        this.motors = motors;
+        for(WPI_TalonFX m : motors) {
+            System.out.println(m);
+        }
     }
 
     public DigitalInput getLimitSwitch() {
@@ -43,17 +52,17 @@ public class Arm extends PivotingArmBase {
     
     @Override
     public double getEncoderPosition() {
-        return this.leader.getSelectedSensorPosition();
+        return motors[0].getSelectedSensorPosition();
     }
 
     @Override
     public double getEncoderVelocity() {
-        return this.leader.getSelectedSensorVelocity();
+        return motors[0].getSelectedSensorVelocity();
     }
 
     @Override
     public void setEncoderPosition(double position) {
-        this.leader.setSelectedSensorPosition(position);
+        this.motors[0].setSelectedSensorPosition(position);
     }
     
     @Override

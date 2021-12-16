@@ -61,7 +61,7 @@ public final class Constants {
         public static final double K_D = 0.10184;
         public static final PID ARM_PID = new PID(K_P, 0, K_D);
         public static final double VELOCITY_CONSTRAINT = 5;
-        public static final double ACCELERATION_CONSTRAINT = 10;
+        public static final double ACCELERATION_CONSTRAINT = 50;
         public static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(
             VELOCITY_CONSTRAINT,
             ACCELERATION_CONSTRAINT
@@ -89,7 +89,7 @@ public final class Constants {
         public static final int ARM_FOLLOWER = 21;
 
         public static final boolean MOTORS_INVERTED = false;
-        public static final boolean LIMIT_SWITCH_INVERTED = false;
+        public static final boolean LIMIT_SWITCH_INVERTED = true;
     }
 
     public static final class LEDConstants {

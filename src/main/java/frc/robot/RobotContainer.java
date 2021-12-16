@@ -104,6 +104,8 @@ public class RobotContainer {
         // button & left trigger are inactive - stop.
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
 
+        // arm.enable();
+
         /* 
          * Arm
          */ 
