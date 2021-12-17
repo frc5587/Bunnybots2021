@@ -151,9 +151,11 @@ public class RobotContainer {
         // when y button is active, move intake forwards | when the y button is inactive
         // - stop.
         yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
+        // yButton.and(leftTrigger.negate()).whenActive(intakeCrate);
         // when y button & left trigger are active, move intake backwards | when the y
         // button & left trigger are inactive - stop.
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
+        // yButton.and(leftTrigger).whenActive(ejectCrate);
 
         // arm.enable();
 
@@ -196,18 +198,18 @@ public class RobotContainer {
         // meters
         // return getRightBox.resetOdometryOnStart();
 
-        ParallelCommandGroup ejectAndArmDown = new ParallelCommandGroup(ejectCrate, armDown);
-        SequentialCommandGroup getBoxOne = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown);
-        SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown); 
+        Command ejectAndArmDown = new SequentialCommandGroup(armDown, ejectCrate);
+        // SequentialCommandGroup getBoxOne = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown);
+        // SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown); 
 
         // * 1 Box
-        // return new SequentialCommandGroup(getBoxOne, backupAndCenter);
+        return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), new SequentialCommandGroup(armUp, dropOffRightBox), ejectAndArmDown), backupAndCenter);
 
         // * 2 Boxes
-        // return new SequentialCommandGroup(getBoxOne, getBoxTwo, backupAndCenter2);
+        // return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown), new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown), backupAndCenter2);
 
         // * Dry runs
         // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, backupAndCenter);
-        return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, getRightBox2, dropOffRightBox2, backupAndCenter2);
+        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, getRightBox2, dropOffRightBox2, backupAndCenter2);
     }
 }

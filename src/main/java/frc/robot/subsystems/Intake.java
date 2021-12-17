@@ -77,7 +77,7 @@ public class Intake extends SubsystemBase {
      * Stops intake
      */
     public void stop() {
-        intakeMotors.set(0);
+        intakeMotors.set(IntakeConstants.HOLD);
         lastSet = 0;
     }
 
@@ -93,6 +93,9 @@ public class Intake extends SubsystemBase {
 
         SmartDashboard.putNumber("has crate", hasCrate()? 1:0);
         SmartDashboard.putNumber("is crate ejected", isCrateEjected()? 1:0);
+
+        SmartDashboard.putNumber("left v", leftVelocity());
+        SmartDashboard.putNumber("right v", rightVelocity());
     }
 
 
@@ -121,9 +124,10 @@ public class Intake extends SubsystemBase {
     public boolean hasCrate() {
         if (useVelocityDetection) {
             if (lastSet > 0) {
-                return rightVelocity() < IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() > IntakeConstants.LEFT_VELOCITY_THRESHOLD;
+                // System.out.println(rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD);
+                return rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD;
             } else {
-                System.out.println("Intake is not spinning forward, cannot detect if crate is grabbed");
+                // System.out.println("Intake is not spinning forward, cannot detect if crate is grabbed");
                 return false; // should this throw an error?
             }
         } else {
@@ -135,7 +139,7 @@ public class Intake extends SubsystemBase {
         if (lastSet < 0) {
             return nowVelocity / getAverageCurrent() > IntakeConstants.EJECTING_VELOCITY_CURRENT_THRESHOLD && getAbsoluteAverageAcceleration() > IntakeConstants.STALL_ACCELERATION_THRESHOLD;
         } else {
-            System.out.println("Intake is not reversing, cannot detect if crate is ejected");
+            // System.out.println("Intake is not reversing, cannot detect if crate is ejected");
             return false; // should this throw an error?
         }
     }

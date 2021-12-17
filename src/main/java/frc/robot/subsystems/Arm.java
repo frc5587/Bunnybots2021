@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 public class Arm extends PivotingArmBase {
-    public WPI_TalonFX[] motors;
+    public static WPI_TalonFX[] motors = {new WPI_TalonFX(ArmConstants.ARM_LEADER), new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)}; 
     // public SpeedControllerGroup motorGroup = new SpeedControllerGroup(motors);
     // private WPI_TalonFX leader = motors[0];
     // private DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH);
@@ -30,16 +30,16 @@ public class Arm extends PivotingArmBase {
     );
 
     public Arm() {
-        this(new WPI_TalonFX[]{new WPI_TalonFX(ArmConstants.ARM_LEADER), new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)});
+        this(motors);
     }
     
     public Arm(WPI_TalonFX[] motors) {
         super(constants, new SpeedControllerGroup(motors));
 
-        this.motors = motors;
-        for(WPI_TalonFX m : motors) {
-            System.out.println(m);
-        }
+        // this.motors = motors;
+        // for(WPI_TalonFX m : motors) {
+        //     System.out.println(m);
+        // }
     }
 
     public DigitalInput getLimitSwitch() {
@@ -67,17 +67,17 @@ public class Arm extends PivotingArmBase {
     
     @Override
     public void configureMotors() {
-        try {
+        // try {
             for(WPI_TalonFX motor : motors) {
                 motor.configFactoryDefault();
                 motor.setNeutralMode(NeutralMode.Brake);
                 motor.setInverted(ArmConstants.MOTORS_INVERTED);
-                motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+                // motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
             }
-        }
-        catch(NullPointerException e) {
-            System.out.println("NullPointerException " + e + " from arm motor");
-        }
+        // }
+        // catch(NullPointerException e) {
+        //     System.out.println("NullPointerException " + e + " from arm motor");
+        // }
     }
     
     public void moveUp() {
