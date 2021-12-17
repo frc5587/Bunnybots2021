@@ -10,7 +10,13 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+// import org.frc5587.lib.subsystems.SimpleMotorBase;
 
+import edu.wpi.first.wpilibj.SpeedController;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase {
     private final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
@@ -26,12 +32,12 @@ public class Intake extends SubsystemBase {
     private double lastVelocity, nowVelocity, lastSet = 0;
 
     public Intake() {
-        super();
-
-        configureSparkMax();
+        // super(new SpeedController[]{rightIntake, leftIntake}, IntakeConstants.THROTTLE);
+        configureMotors();
     }
 
-    private void configureSparkMax() {
+    // @Override
+    public void configureMotors() {
         rightIntake.restoreFactoryDefaults();
         leftIntake.restoreFactoryDefaults();
 

@@ -22,20 +22,22 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.SuperSimpleDrivetrain;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Arm;
 
-import frc.robot.Constants.LEDConstants;
-
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -51,7 +53,7 @@ public class RobotContainer {
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     // private final Drivetrain drivetrain = new Drivetrain();
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2, LEDConstants.LED_LENGTH, 255));
+    // private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2, LEDConstants.LED_LENGTH, 255));
     private final SuperSimpleDrivetrain ssDrivetrain = new SuperSimpleDrivetrain();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
     private final Intake intake = new Intake();
@@ -71,6 +73,14 @@ public class RobotContainer {
     private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(ssDrivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
     private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(ssDrivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
 
+    private final Arm arm = new Arm();
+    // Commands
+    // private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    // // Others
+    // private final AddressableLEDController ledController = new AddressableLEDController(
+    //     Constants.LEDConstants.PWM_PORT,
+    //     Constants.LEDConstants.LED_LENGTH
+    // );
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -96,7 +106,24 @@ public class RobotContainer {
         JoystickButton bButton = new JoystickButton(xboxController, XboxController.Button.kB.value);
         // Left Trigger for Intake & Bunny Dumper controls
         Trigger leftTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kLeft));
+        // DPad Up for higher arm setpoint
+        POVButton dpadUp = new POVButton(xboxController, 0);
+        // DPad Down for lower arm setpoint
+        POVButton dpadDown = new POVButton(xboxController, 180);
+        // right trigger for manual arm control
+        Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
+        // arm limit switch
+        Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
+        /**
+         * Bunny Dumper
+         */
+        
+        // when b button and left trigger are pressed together, extend the pistons. when
+        // the two buttons are released, retract the pistons
+        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
+                .whenInactive(bunnyDumper::retract, bunnyDumper);
+                
         /*
          * Intake
          */
@@ -108,16 +135,34 @@ public class RobotContainer {
         // button & left trigger are inactive - stop.
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
 
-        /*
-         * Bunny Dumper
-         */
+        // arm.enable();
 
-        // when b button and left trigger are pressed together, extend the pistons. when
-        // the two buttons are released, retract the pistons
-        bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper).whenInactive(bunnyDumper::retract,
-                bunnyDumper);
+        /* 
+         * Arm
+         */ 
+        armLimitSwitch.whenActive(arm::resetEncoders);
 
-        // bButton.and(leftTrigger).whenInactive(bunnyDumper::retract, bunnyDumper);
+        dpadUp.whenPressed(
+            () -> arm.getController().setGoal(Constants.ArmConstants.HIGHER_SETPOINT), arm
+        );
+
+        dpadDown.whenPressed(
+            () -> arm.getController().setGoal(Constants.ArmConstants.LOWER_SETPOINT), arm
+        );
+
+        // while X is held
+        // rightTrigger.whileActiveContinuous(
+        //     () -> {
+        //         // make sure useOutput() is not being used by periodic()
+        //         SmartDashboard.putBoolean("OUTPUT ON?", false);
+        //         // set the arm to the output of the right xbox controller stick
+        //         arm.set(
+        //             xboxController.getY(Hand.kRight) * Constants.ArmConstants.ARM_SPEED_MULTIPLIER
+        //         );
+        //     },
+        // arm)
+        // //when X is released, turn output back on.
+        // .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
     }
 
     /**
