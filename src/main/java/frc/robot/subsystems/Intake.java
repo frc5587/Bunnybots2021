@@ -30,8 +30,14 @@ public class Intake extends SubsystemBase {
     private final PowerDistributionPanel pdp = new PowerDistributionPanel();
 
     private double lastVelocity, nowVelocity, lastSet = 0;
+    private boolean useVelocityDetection;
 
     public Intake() {
+        this(true);
+    }
+
+    public Intake(boolean velocityDetection) {
+        useVelocityDetection = velocityDetection;
         // super(new SpeedController[]{rightIntake, leftIntake}, IntakeConstants.THROTTLE);
         configureMotors();
     }
@@ -55,16 +61,16 @@ public class Intake extends SubsystemBase {
      * Moves intake forwards
      */
     public void forward() {
-        intakeMotors.set(IntakeConstants.THROTTLE);
-        lastSet = IntakeConstants.THROTTLE;
+        intakeMotors.set(IntakeConstants.THROTTLE_FORWARD);
+        lastSet = IntakeConstants.THROTTLE_FORWARD;
     }
     
     /**
      * Moves intake backwards
      */
     public void backward() {
-        intakeMotors.set(-IntakeConstants.THROTTLE);
-        lastSet = -IntakeConstants.THROTTLE;
+        intakeMotors.set(-IntakeConstants.THROTTLE_REVERSE);
+        lastSet = -IntakeConstants.THROTTLE_REVERSE;
     }
     
     /**
@@ -85,7 +91,8 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Acceleration", getAbsoluteAverageAcceleration());
         SmartDashboard.putNumber("ratio", nowVelocity / getAverageCurrent());
 
-        SmartDashboard.putNumber("Stalled", isStalled()? 1:0);
+        SmartDashboard.putNumber("has crate", hasCrate()? 1:0);
+        SmartDashboard.putNumber("is crate ejected", isCrateEjected()? 1:0);
     }
 
 
@@ -95,16 +102,33 @@ public class Intake extends SubsystemBase {
         return (pdp.getCurrent(IntakeConstants.PDP_SLOT_1) + pdp.getCurrent(IntakeConstants.PDP_SLOT_2)) / 2;
     }
 
+    private double leftVelocity() {
+        return leftEncoder.getVelocity();
+    }
+
+    private double rightVelocity() {
+        return rightEncoder.getVelocity();
+    }
+
     private double getAverageVelocity() {
-        return (rightEncoder.getVelocity() + leftEncoder.getVelocity()) / 2;
+        return (rightVelocity() + leftVelocity()) / 2;
     }
 
     private double getAbsoluteAverageAcceleration() {
         return Math.abs((nowVelocity - lastVelocity) / 0.02);
     }
 
-    public boolean isStalled() {
-        return nowVelocity / getAverageCurrent() < IntakeConstants.STALL_VELOCITY_CURRENT_THRESHOLD && getAbsoluteAverageAcceleration() < IntakeConstants.STALL_ACCELERATION_THRESHOLD;
+    public boolean hasCrate() {
+        if (useVelocityDetection) {
+            if (lastSet > 0) {
+                return rightVelocity() < IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() > IntakeConstants.LEFT_VELOCITY_THRESHOLD;
+            } else {
+                System.out.println("Intake is not spinning forward, cannot detect if crate is grabbed");
+                return false; // should this throw an error?
+            }
+        } else {
+            return nowVelocity / getAverageCurrent() < IntakeConstants.STALL_VELOCITY_CURRENT_THRESHOLD && getAbsoluteAverageAcceleration() < IntakeConstants.STALL_ACCELERATION_THRESHOLD;
+        }
     }
 
     public boolean isCrateEjected() {

@@ -109,6 +109,9 @@ public final class Constants {
         public static final int ENCODER_CPR = 2048;
         public static final double LOWER_SETPOINT = Math.toRadians(5);
         public static final double HIGHER_SETPOINT = Math.toRadians(60);
+
+        public static final double LOWER_MOVE_THRESHOLD = Math.toRadians(10);
+        public static final double HIGHER_MOVE_THRESHOLD = Math.toRadians(40); // TODO this may need to change
         public static final int ZERO_OFFSET_TICKS = 313;
         public static final double[] SOFT_LIMITS = new double[]{0, Math.toRadians(65)};
 
@@ -138,7 +141,8 @@ public final class Constants {
         public static final int STALL_LIMIT = 20;
         public static final int FREE_LIMIT = 25;
         // motor speeds
-        public static final double THROTTLE = 0.75;
+        public static final double THROTTLE_FORWARD = 0.75;
+        public static final double THROTTLE_REVERSE = 0.75;
 
         public static final int PDP_SLOT_1 = 2; // TODO: check if these are correct by substituting them for other slots
         public static final int PDP_SLOT_2 = 3; // TODO: check if these are correct by substituting them for other slots
@@ -147,6 +151,10 @@ public final class Constants {
         public static final double STALL_ACCELERATION_THRESHOLD = 1;        // TODO this is prolly wrong
         public static final double EJECTING_VELOCITY_CURRENT_THRESHOLD = 5; // TODO this is prolly wrong
         public static final double EJECTING_ACCELERATION_THRESHOLD = 2;     // TODO this is prolly wrong
+
+        public static final double LEFT_VELOCITY_THRESHOLD = 10;  // rps
+        public static final double RIGHT_VELOCITY_THRESHOLD = 1;  // rps
+        public static final double EJECT_CRATE_RUNTIME = 0.5; // seconds
     }
 
     public static class BunnyDumperConstants {

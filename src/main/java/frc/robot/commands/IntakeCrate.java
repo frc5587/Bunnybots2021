@@ -24,6 +24,6 @@ public class IntakeCrate extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return intake.isStalled();
+        return intake.hasCrate();
     }
 }

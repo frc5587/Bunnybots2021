@@ -79,4 +79,12 @@ public class Arm extends PivotingArmBase {
             System.out.println("NullPointerException " + e + " from arm motor");
         }
     }
+    
+    public void moveUp() {
+        getController().setGoal(ArmConstants.HIGHER_SETPOINT);
+    }
+    
+    public void moveDown() {
+        getController().setGoal(ArmConstants.LOWER_SETPOINT);
+    }
 }

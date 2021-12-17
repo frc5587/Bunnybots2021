@@ -15,6 +15,8 @@ import org.frc5587.lib.auto.RamseteCommandWrapper;
 import org.frc5587.lib.advanced.RainbowLEDPattern;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ArmDown;
+import frc.robot.commands.ArmUp;
 import frc.robot.commands.EjectCrate;
 import frc.robot.commands.IntakeCrate;
 import frc.robot.subsystems.BunnyDumper;
@@ -53,33 +55,51 @@ public class RobotContainer {
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
     // private final Drivetrain drivetrain = new Drivetrain();
-    // private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2, LEDConstants.LED_LENGTH, 255));
+    // private final AddressableLEDController ledController = new
+    // AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new
+    // RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2,
+    // LEDConstants.LED_LENGTH, 255));
     private final SuperSimpleDrivetrain ssDrivetrain = new SuperSimpleDrivetrain();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
     private final Intake intake = new Intake();
+    private final Arm arm = new Arm();
     // Commands
     private final ArcadeDrive arcadeDrive = new ArcadeDrive(ssDrivetrain, joy::getY, () -> -joy.getXCurveDampened());
     private final IntakeCrate intakeCrate = new IntakeCrate(intake);
     private final EjectCrate ejectCrate = new EjectCrate(intake);
+    private final ArmUp armUp = new ArmUp(arm);
+    private final ArmDown armDown = new ArmDown(arm);
     // Auto paths
-    private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS); 
-    private final RamseteCommandWrapper dropOffRightBox = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("drop off right box"), AutoConstants.RAMSETE_CONSTANTS); 
-    private final RamseteCommandWrapper backupAndCenter = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("backup and center"), AutoConstants.RAMSETE_CONSTANTS); 
-    private final RamseteCommandWrapper getRightBox2 = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("get right box 2"), AutoConstants.RAMSETE_CONSTANTS); 
-    private final RamseteCommandWrapper dropOffRightBox2 = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("drop off right box 2"), AutoConstants.RAMSETE_CONSTANTS); 
-    private final RamseteCommandWrapper backupAndCenter2 = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("backup and center 2"), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper dropOffRightBox = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("drop off right box"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper backupAndCenter = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("backup and center"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper getRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("get right box 2"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper dropOffRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("drop off right box 2"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper backupAndCenter2 = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("backup and center 2"), AutoConstants.RAMSETE_CONSTANTS);
     // Testing auto paths
-    private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("s path"), AutoConstants.RAMSETE_CONSTANTS).resetOdometryOnStart(); 
-    private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(ssDrivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
-    private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(ssDrivetrain, new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)), AutoConstants.RAMSETE_CONSTANTS); 
+    private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("s path"),
+            AutoConstants.RAMSETE_CONSTANTS).resetOdometryOnStart();
+    private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(ssDrivetrain,
+            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)),
+            AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(ssDrivetrain,
+            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)),
+            AutoConstants.RAMSETE_CONSTANTS);
 
-    private final Arm arm = new Arm();
     // Commands
-    // private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    // private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain,
+    // joy::getY, () -> -joy.getXCurveDampened());
     // // Others
-    // private final AddressableLEDController ledController = new AddressableLEDController(
-    //     Constants.LEDConstants.PWM_PORT,
-    //     Constants.LEDConstants.LED_LENGTH
+    // private final AddressableLEDController ledController = new
+    // AddressableLEDController(
+    // Constants.LEDConstants.PWM_PORT,
+    // Constants.LEDConstants.LED_LENGTH
     // );
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -118,12 +138,12 @@ public class RobotContainer {
         /**
          * Bunny Dumper
          */
-        
+
         // when b button and left trigger are pressed together, extend the pistons. when
         // the two buttons are released, retract the pistons
         bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
                 .whenInactive(bunnyDumper::retract, bunnyDumper);
-                
+
         /*
          * Intake
          */
@@ -137,29 +157,28 @@ public class RobotContainer {
 
         // arm.enable();
 
-        /* 
+        /*
          * Arm
-         */ 
+         */
         armLimitSwitch.whenActive(arm::resetEncoders);
 
-        dpadUp.whenPressed(
-            () -> arm.getController().setGoal(Constants.ArmConstants.HIGHER_SETPOINT), arm
-        );
+        // dpadUp.whenPressed(arm::moveUp, arm);
+        // dpadDown.whenPressed(arm::moveDown, arm);
 
-        dpadDown.whenPressed(
-            () -> arm.getController().setGoal(Constants.ArmConstants.LOWER_SETPOINT), arm
-        );
+        dpadUp.whenPressed(armUp);
+        dpadDown.whenPressed(armDown);
 
         // while X is held
         // rightTrigger.whileActiveContinuous(
-        //     () -> {
-        //         // make sure useOutput() is not being used by periodic()
-        //         SmartDashboard.putBoolean("OUTPUT ON?", false);
-        //         // set the arm to the output of the right xbox controller stick
-        //         arm.set(
-        //             xboxController.getY(Hand.kRight) * Constants.ArmConstants.ARM_SPEED_MULTIPLIER
-        //         );
-        //     },
+        // () -> {
+        // // make sure useOutput() is not being used by periodic()
+        // SmartDashboard.putBoolean("OUTPUT ON?", false);
+        // // set the arm to the output of the right xbox controller stick
+        // arm.set(
+        // xboxController.getY(Hand.kRight) *
+        // Constants.ArmConstants.ARM_SPEED_MULTIPLIER
+        // );
+        // },
         // arm)
         // //when X is released, turn output back on.
         // .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
@@ -173,13 +192,22 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         // return null
-        // return x2Meters.zeroOdometryOnStart(); //TODO this should move forward 2 meters
+        // return x2Meters.zeroOdometryOnStart(); //TODO this should move forward 2
+        // meters
         // return getRightBox.resetOdometryOnStart();
 
-        // return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), dropOffRightBox, ejectCrate, backupAndCenter);
+        ParallelCommandGroup ejectAndArmDown = new ParallelCommandGroup(ejectCrate, armDown);
+        SequentialCommandGroup getBoxOne = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown);
+        SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown); 
 
-        // return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), dropOffRightBox, ejectCrate, new ParallelCommandGroup(getRightBox2, intakeCrate), ejectCrate, backupAndCenter2);
+        // * 1 Box
+        // return new SequentialCommandGroup(getBoxOne, backupAndCenter);
 
-        return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, backupAndCenter);
+        // * 2 Boxes
+        // return new SequentialCommandGroup(getBoxOne, getBoxTwo, backupAndCenter2);
+
+        // * Dry runs
+        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, backupAndCenter);
+        return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, getRightBox2, dropOffRightBox2, backupAndCenter2);
     }
 }
