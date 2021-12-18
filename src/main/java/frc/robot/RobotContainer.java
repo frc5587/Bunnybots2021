@@ -6,20 +6,38 @@ package frc.robot;
 
 import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
+
+import java.util.ArrayList;
+
 import org.frc5587.lib.advanced.AddressableLEDController;
+import org.frc5587.lib.auto.AutoPath;
+import org.frc5587.lib.auto.RamseteCommandWrapper;
+import org.frc5587.lib.advanced.RainbowLEDPattern;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ArmDown;
+import frc.robot.commands.ArmUp;
+import frc.robot.commands.EjectCrate;
+import frc.robot.commands.IntakeCrate;
 import frc.robot.subsystems.BunnyDumper;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.SuperSimpleDrivetrain;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Intake;
-import frc.robot.Constants.LEDConstants;
-import frc.robot.subsystems.FullArmSubsysTrapezoid;
+import frc.robot.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.XboxController;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -36,29 +54,58 @@ public class RobotContainer {
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
-    private final Drivetrain drivetrain = new Drivetrain();
-    private final Intake intake = new Intake();
+    // private final Drivetrain drivetrain = new Drivetrain();
+    // private final AddressableLEDController ledController = new
+    // AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new
+    // RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2,
+    // LEDConstants.LED_LENGTH, 255));
+    private final SuperSimpleDrivetrain ssDrivetrain = new SuperSimpleDrivetrain();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
-    private final FullArmSubsysTrapezoid arm = new FullArmSubsysTrapezoid();
+    private final Intake intake = new Intake();
+    private final Arm arm = new Arm();
     // Commands
-    private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
-    // private final ArmMovementThrottle armMovementThrottle = new ArmMovementThrottle(arm, () -> xb.getY(Hand.kRight));
-    // Others
-    private final AddressableLEDController ledController = new AddressableLEDController(LEDConstants.PWM_PORT,
-            LEDConstants.LED_LENGTH);
+    private final ArcadeDrive arcadeDrive = new ArcadeDrive(ssDrivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    private final IntakeCrate intakeCrate = new IntakeCrate(intake);
+    private final EjectCrate ejectCrate = new EjectCrate(intake);
+    private final ArmUp armUp = new ArmUp(arm);
+    private final ArmDown armDown = new ArmDown(arm);
+    // Auto paths
+    private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper dropOffRightBox = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("drop off right box"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper backupAndCenter = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("backup and center"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper getRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("get right box 2"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper dropOffRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("drop off right box 2"), AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper backupAndCenter2 = new RamseteCommandWrapper(ssDrivetrain,
+            new AutoPath("backup and center 2"), AutoConstants.RAMSETE_CONSTANTS);
+    // Testing auto paths
+    private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("s path"),
+            AutoConstants.RAMSETE_CONSTANTS).resetOdometryOnStart();
+    private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(ssDrivetrain,
+            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)),
+            AutoConstants.RAMSETE_CONSTANTS);
+    private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(ssDrivetrain,
+            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)),
+            AutoConstants.RAMSETE_CONSTANTS);
+
+    // // Others
+    // private final AddressableLEDController ledController = new
+    // AddressableLEDController(
+    // Constants.LEDConstants.PWM_PORT,
+    // Constants.LEDConstants.LED_LENGTH
+    // );
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        // make drivetrain use arcadeDrive to drive
-        drivetrain.setDefaultCommand(arcadeDrive);
-        // make the arm use the xbox joystick to move
+        // make ssDrivetrain use arcadeDrive to drive
+        ssDrivetrain.setDefaultCommand(arcadeDrive);
         // Configure the button bindings
         configureButtonBindings();
-
-        ledController.startLEDStepHandlerNotifier((Integer step, AddressableLEDBuffer buffer) -> {
-            return ledController.stretchRainbow(50 * 10, step, buffer);
-        }, 0.02);
     }
 
     /**
@@ -80,55 +127,57 @@ public class RobotContainer {
         POVButton dpadUp = new POVButton(xboxController, 0);
         // DPad Down for lower arm setpoint
         POVButton dpadDown = new POVButton(xboxController, 180);
+        // right trigger for manual arm control
+        Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
         // arm limit switch
         Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
-        /**
-         * Bunny Dumper
-         */
-        
-        // when b button and left trigger are pressed together, extend the pistons. when
-        // the two buttons are released, retract the pistons
+        // Bunny Dumper
+        /*
+        * when b button and left trigger are pressed together, extend the pistons. when
+        * the two buttons are released, retract the pistons
+        */
         bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
                 .whenInactive(bunnyDumper::retract, bunnyDumper);
-                
-        /*
-         * Intake
-         */
 
-        // when y button is active, move intake forwards | when the y button is inactive
-        // - stop.
+        // Intake
+        /** 
+        * when y button is active, move intake forwards 
+        * when the y button is inactive, stop.
+        */
         yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
-        // when y button & left trigger are active, move intake backwards | when the y
-        // button & left trigger are inactive - stop.
-        yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
+        // yButton.and(leftTrigger.negate()).whenActive(intakeCrate);
 
+        /** 
+        * when y button & left trigger are active, move intake backwards
+        * when the y button & left trigger are inactive, stop.
+        */
+        yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
+        // yButton.and(leftTrigger).whenActive(ejectCrate);
+
+        // Arm
         armLimitSwitch.whenActive(arm::resetEncoders);
 
-        dpadUp.whenPressed(
-            () -> {
-                arm.getController().setGoal(Math.toRadians(60));
-            },
-            arm
-        );
+        dpadUp.whenPressed(armUp);
+        dpadDown.whenPressed(armDown);
 
-        dpadDown.whenPressed(
-            () -> {
-                arm.getController().setGoal(Math.toRadians(5));
-            },
-            arm
+        // Manual arm control
+        // while X is held
+        /* 
+        rightTrigger.whileActiveContinuous(
+        () -> {
+        // make sure useOutput() is not being used by periodic()
+        SmartDashboard.putBoolean("OUTPUT ON?", false);
+        // set the arm to the output of the right xbox controller stick
+        arm.set(
+        xboxController.getY(Hand.kRight) *
+        Constants.ArmConstants.ARM_SPEED_MULTIPLIER
         );
-
-        // xButton.whenPressed(
-        //     () -> {
-        //         arm.getController().setGoal(Math.toRadians(80));
-        //         SmartDashboard.putNumber("GOAL SET TO", arm.getController().getGoal().position);
-        //         SmartDashboard.putBoolean("PIDENABLED", arm.isEnabled());
-        //     },
-        //     arm
-        // );
-        // dpadUp.whileActiveContinuous(arm::moveByFixedSpeed, arm).whenInactive(arm::stop, arm);
-        // dpadDown.and(armLimitSwitch).whileActiveContinuous(arm::moveFixedReversed, arm).whenInactive(arm::stop, arm);
+        },
+        arm)
+        //when X is released, turn output back on.
+        .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
+        */
     }
 
     /**
@@ -137,6 +186,22 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return null;
+        // return x2Meters.zeroOdometryOnStart(); //TODO this should move forward 2
+        // meters
+        // return getRightBox.resetOdometryOnStart();
+
+        Command ejectAndArmDown = new SequentialCommandGroup(armDown, ejectCrate);
+        // SequentialCommandGroup getBoxOne = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown);
+        // SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown); 
+
+        // * 1 Box
+        return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), new SequentialCommandGroup(armUp, dropOffRightBox), ejectAndArmDown), backupAndCenter);
+
+        // * 2 Boxes
+        // return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown), new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown), backupAndCenter2);
+
+        // * Dry runs
+        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, backupAndCenter);
+        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, getRightBox2, dropOffRightBox2, backupAndCenter2);
     }
 }

@@ -1,0 +1,9 @@
+{
+  "lengthUnit": "Meter",
+  "exportUnit": "Always Meters",
+  "maxVelocity": 0.75,
+  "maxAcceleration": 0.5,
+  "trackWidth": 0.6858,
+  "gameName": "Bunnybots 2021",
+  "outputDir": "../src/main/deploy/paths"
+}
