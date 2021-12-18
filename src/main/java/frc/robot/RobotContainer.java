@@ -92,9 +92,6 @@ public class RobotContainer {
             new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)),
             AutoConstants.RAMSETE_CONSTANTS);
 
-    // Commands
-    // private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain,
-    // joy::getY, () -> -joy.getXCurveDampened());
     // // Others
     // private final AddressableLEDController ledController = new
     // AddressableLEDController(
@@ -135,55 +132,52 @@ public class RobotContainer {
         // arm limit switch
         Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
-        /**
-         * Bunny Dumper
-         */
-
-        // when b button and left trigger are pressed together, extend the pistons. when
-        // the two buttons are released, retract the pistons
+        // Bunny Dumper
+        /*
+        * when b button and left trigger are pressed together, extend the pistons. when
+        * the two buttons are released, retract the pistons
+        */
         bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
                 .whenInactive(bunnyDumper::retract, bunnyDumper);
 
-        /*
-         * Intake
-         */
-
-        // when y button is active, move intake forwards | when the y button is inactive
-        // - stop.
+        // Intake
+        /** 
+        * when y button is active, move intake forwards 
+        * when the y button is inactive, stop.
+        */
         yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
         // yButton.and(leftTrigger.negate()).whenActive(intakeCrate);
-        // when y button & left trigger are active, move intake backwards | when the y
-        // button & left trigger are inactive - stop.
+
+        /** 
+        * when y button & left trigger are active, move intake backwards
+        * when the y button & left trigger are inactive, stop.
+        */
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
         // yButton.and(leftTrigger).whenActive(ejectCrate);
 
-        // arm.enable();
-
-        /*
-         * Arm
-         */
+        // Arm
         armLimitSwitch.whenActive(arm::resetEncoders);
-
-        // dpadUp.whenPressed(arm::moveUp, arm);
-        // dpadDown.whenPressed(arm::moveDown, arm);
 
         dpadUp.whenPressed(armUp);
         dpadDown.whenPressed(armDown);
 
+        // Manual arm control
         // while X is held
-        // rightTrigger.whileActiveContinuous(
-        // () -> {
-        // // make sure useOutput() is not being used by periodic()
-        // SmartDashboard.putBoolean("OUTPUT ON?", false);
-        // // set the arm to the output of the right xbox controller stick
-        // arm.set(
-        // xboxController.getY(Hand.kRight) *
-        // Constants.ArmConstants.ARM_SPEED_MULTIPLIER
-        // );
-        // },
-        // arm)
-        // //when X is released, turn output back on.
-        // .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
+        /* 
+        rightTrigger.whileActiveContinuous(
+        () -> {
+        // make sure useOutput() is not being used by periodic()
+        SmartDashboard.putBoolean("OUTPUT ON?", false);
+        // set the arm to the output of the right xbox controller stick
+        arm.set(
+        xboxController.getY(Hand.kRight) *
+        Constants.ArmConstants.ARM_SPEED_MULTIPLIER
+        );
+        },
+        arm)
+        //when X is released, turn output back on.
+        .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
+        */
     }
 
     /**
@@ -192,8 +186,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        // return null
         // return x2Meters.zeroOdometryOnStart(); //TODO this should move forward 2
         // meters
         // return getRightBox.resetOdometryOnStart();

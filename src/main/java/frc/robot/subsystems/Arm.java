@@ -12,9 +12,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 public class Arm extends PivotingArmBase {
     public static WPI_TalonFX[] motors = {new WPI_TalonFX(ArmConstants.ARM_LEADER), new WPI_TalonFX(ArmConstants.ARM_FOLLOWER)}; 
-    // public SpeedControllerGroup motorGroup = new SpeedControllerGroup(motors);
-    // private WPI_TalonFX leader = motors[0];
-    // private DigitalInput limitSwitch = new DigitalInput(ArmConstants.LIMIT_SWITCH);
 
     public static FPIDConstants constants = new FPIDConstants(
         ArmConstants.ARM_SPEED_MULTIPLIER,
@@ -35,11 +32,6 @@ public class Arm extends PivotingArmBase {
     
     public Arm(WPI_TalonFX[] motors) {
         super(constants, new SpeedControllerGroup(motors));
-
-        // this.motors = motors;
-        // for(WPI_TalonFX m : motors) {
-        //     System.out.println(m);
-        // }
     }
 
     public DigitalInput getLimitSwitch() {
@@ -62,7 +54,7 @@ public class Arm extends PivotingArmBase {
 
     @Override
     public void setEncoderPosition(double position) {
-        this.motors[0].setSelectedSensorPosition(position);
+        motors[0].setSelectedSensorPosition(position);
     }
     
     @Override

@@ -15,10 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SuperSimpleDrivetrain extends SubsystemBase {
-    // public static int[] leftMotorIDs = new int[]{DrivetrainConstants.LEFT_LEADER,
-    // DrivetrainConstants.LEFT_FOLLOWER};
-    // public static int[] rightMotorIDs = new
-    // int[]{DrivetrainConstants.RIGHT_LEADER, DrivetrainConstants.RIGHT_FOLLOWER};
     private final WPI_TalonFX leftLeader = new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER);
     private final WPI_TalonFX leftFollower = new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER);
     private final WPI_TalonFX rightLeader = new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER);
@@ -73,9 +69,6 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
 
         SmartDashboard.putNumber("left v", getLeftVelocityMetersPerSecond());
         SmartDashboard.putNumber("right v", getRightVelocityMetersPerSecond());
-
-        // System.out.println("X:  " + getPose() + "  Y:  " + getPose().getTranslation().getY() + "  R:  " + getHeading()
-        //         + "  " + getPose().getRotation());
     }
 
     public void resetEncoders() {
