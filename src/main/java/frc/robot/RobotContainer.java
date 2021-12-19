@@ -9,10 +9,8 @@ import org.frc5587.lib.control.DeadbandXboxController;
 
 import java.util.ArrayList;
 
-import org.frc5587.lib.advanced.AddressableLEDController;
 import org.frc5587.lib.auto.AutoPath;
 import org.frc5587.lib.auto.RamseteCommandWrapper;
-import org.frc5587.lib.advanced.RainbowLEDPattern;
 
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmDown;
@@ -21,21 +19,17 @@ import frc.robot.commands.CrawlBackwards;
 import frc.robot.commands.EjectCrate;
 import frc.robot.commands.IntakeCrate;
 import frc.robot.subsystems.BunnyDumper;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.SuperSimpleDrivetrain;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Arm;
 
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -55,11 +49,6 @@ public class RobotContainer {
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
-    // private final Drivetrain drivetrain = new Drivetrain();
-    // private final AddressableLEDController ledController = new
-    // AddressableLEDController(LEDConstants.PWM_PORT, LEDConstants.LED_LENGTH, new
-    // RainbowLEDPattern(LEDConstants.LED_SPEED, LEDConstants.LED_LENGTH / 2,
-    // LEDConstants.LED_LENGTH, 255));
     private final SuperSimpleDrivetrain ssDrivetrain = new SuperSimpleDrivetrain();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
     private final Intake intake = new Intake();
@@ -96,12 +85,6 @@ public class RobotContainer {
             new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)),
             AutoConstants.RAMSETE_CONSTANTS);
 
-    // // Others
-    // private final AddressableLEDController ledController = new
-    // AddressableLEDController(
-    // Constants.LEDConstants.PWM_PORT,
-    // Constants.LEDConstants.LED_LENGTH
-    // );
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -164,24 +147,6 @@ public class RobotContainer {
 
         dpadUp.whenPressed(armUp);
         dpadDown.whenPressed(armDown);
-
-        // Manual arm control
-        // while X is held
-        /* 
-        rightTrigger.whileActiveContinuous(
-        () -> {
-        // make sure useOutput() is not being used by periodic()
-        SmartDashboard.putBoolean("OUTPUT ON?", false);
-        // set the arm to the output of the right xbox controller stick
-        arm.set(
-        xboxController.getY(Hand.kRight) *
-        Constants.ArmConstants.ARM_SPEED_MULTIPLIER
-        );
-        },
-        arm)
-        //when X is released, turn output back on.
-        .whenInactive(() -> SmartDashboard.putBoolean("OUTPUT ON?", true), arm);
-        */
     }
 
     /**
@@ -190,8 +155,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // return x2Meters.zeroOdometryOnStart(); //TODO this should move forward 2
-        // meters
+        // * simple tests
+        // return x2Meters.zeroOdometryOnStart(); 
         // return getRightBox.resetOdometryOnStart();
 
         // Command ejectAndArmDown = new SequentialCommandGroup(autoArmDown, ejectCrate);
