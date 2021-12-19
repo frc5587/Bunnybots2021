@@ -15,7 +15,6 @@ import org.frc5587.lib.auto.RamseteCommandWrapper;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmDown;
 import frc.robot.commands.ArmUp;
-import frc.robot.commands.CrawlBackwards;
 import frc.robot.commands.EjectCrate;
 import frc.robot.commands.IntakeCrate;
 import frc.robot.subsystems.BunnyDumper;
@@ -61,7 +60,6 @@ public class RobotContainer {
     private final ArmDown armDown = new ArmDown(arm);
     private final ArmUp autoArmUp = new ArmUp(arm);
     private final ArmDown autoArmDown = new ArmDown(arm);
-    private final CrawlBackwards crawlBg = new CrawlBackwards(ssDrivetrain);
     // Auto paths
     private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(ssDrivetrain,
             new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS);
