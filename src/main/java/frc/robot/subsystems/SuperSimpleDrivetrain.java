@@ -139,4 +139,10 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
     public void crawl() {
         tankDriveVolts(DrivetrainConstants.CRAWL_THROTTLE, DrivetrainConstants.CRAWL_THROTTLE);
     }
+
+    public void crawlBackwards() {
+        System.out.println("crawling");
+        // tankDriveVolts(-DrivetrainConstants.CRAWL_THROTTLE, -DrivetrainConstants.CRAWL_THROTTLE);
+        arcadeDrive(DrivetrainConstants.CRAWL_THROTTLE, 0);
+    }
 }

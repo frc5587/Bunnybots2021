@@ -142,7 +142,7 @@ public final class Constants {
         public static final int FREE_LIMIT = 25;
         // motor speeds
         public static final double THROTTLE_FORWARD = 0.75;
-        public static final double THROTTLE_REVERSE = 0.5;
+        public static final double THROTTLE_REVERSE = 0.25;
 
         public static final int PDP_SLOT_1 = 2; // TODO: check if these are correct by substituting them for other slots
         public static final int PDP_SLOT_2 = 3; // TODO: check if these are correct by substituting them for other slots

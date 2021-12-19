@@ -17,6 +17,7 @@ import org.frc5587.lib.advanced.RainbowLEDPattern;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ArmDown;
 import frc.robot.commands.ArmUp;
+import frc.robot.commands.CrawlBackwards;
 import frc.robot.commands.EjectCrate;
 import frc.robot.commands.IntakeCrate;
 import frc.robot.subsystems.BunnyDumper;
@@ -69,6 +70,9 @@ public class RobotContainer {
     private final EjectCrate ejectCrate = new EjectCrate(intake);
     private final ArmUp armUp = new ArmUp(arm);
     private final ArmDown armDown = new ArmDown(arm);
+    private final ArmUp autoArmUp = new ArmUp(arm);
+    private final ArmDown autoArmDown = new ArmDown(arm);
+    private final CrawlBackwards crawlBg = new CrawlBackwards(ssDrivetrain);
     // Auto paths
     private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(ssDrivetrain,
             new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS);
@@ -190,15 +194,15 @@ public class RobotContainer {
         // meters
         // return getRightBox.resetOdometryOnStart();
 
-        Command ejectAndArmDown = new SequentialCommandGroup(armDown, ejectCrate);
+        // Command ejectAndArmDown = new SequentialCommandGroup(autoArmDown, ejectCrate);
         // SequentialCommandGroup getBoxOne = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown);
         // SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown); 
-
+        // return crawlBg;
         // * 1 Box
-        return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), new SequentialCommandGroup(armUp, dropOffRightBox), ejectAndArmDown), backupAndCenter);
+        return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), autoArmUp, dropOffRightBox, autoArmDown, ejectCrate, backupAndCenter);
 
         // * 2 Boxes
-        // return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown), new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown), backupAndCenter2);
+        // return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, new SequentialCommandGroup(autoArmDown, ejectCrate)), new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, new SequentialCommandGroup(autoArmDown, ejectCrate)), backupAndCenter2);
 
         // * Dry runs
         // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, backupAndCenter);
