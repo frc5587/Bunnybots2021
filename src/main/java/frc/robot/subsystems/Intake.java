@@ -5,18 +5,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
-// import org.frc5587.lib.subsystems.SimpleMotorBase;
-
-import edu.wpi.first.wpilibj.SpeedController;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Intake extends SubsystemBase {
     private final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
@@ -27,18 +19,9 @@ public class Intake extends SubsystemBase {
 
     private final SpeedControllerGroup intakeMotors = new SpeedControllerGroup(leftIntake, rightIntake);
 
-    private final PowerDistributionPanel pdp = new PowerDistributionPanel();
-
-    private double lastVelocity, nowVelocity, lastSet = 0;
-    private boolean useVelocityDetection;
+    private double lastSet = 0;
 
     public Intake() {
-        this(true);
-    }
-
-    public Intake(boolean velocityDetection) {
-        useVelocityDetection = velocityDetection;
-        // super(new SpeedController[]{rightIntake, leftIntake}, IntakeConstants.THROTTLE);
         configureMotors();
     }
 
@@ -83,26 +66,10 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        lastVelocity = nowVelocity;
-        nowVelocity = getAverageVelocity();
-
-        SmartDashboard.putNumber("Current", getAverageCurrent());
-        SmartDashboard.putNumber("Velocity", getAverageVelocity());
-        SmartDashboard.putNumber("Acceleration", getAbsoluteAverageAcceleration());
-        SmartDashboard.putNumber("ratio", nowVelocity / getAverageCurrent());
-
         SmartDashboard.putNumber("has crate", hasCrate()? 1:0);
-        SmartDashboard.putNumber("is crate ejected", isCrateEjected()? 1:0);
 
         SmartDashboard.putNumber("left v", leftVelocity());
         SmartDashboard.putNumber("right v", rightVelocity());
-    }
-
-
-
-    private double getAverageCurrent() {
-        // System.out.println("PDP: " + pdp.getCurrent(IntakeConstants.PDP_SLOT_1) + "    "+ pdp.getTemperature() + "   " + pdp.getTotalCurrent() + "   " + pdp.getVoltage());
-        return (pdp.getCurrent(IntakeConstants.PDP_SLOT_1) + pdp.getCurrent(IntakeConstants.PDP_SLOT_2)) / 2;
     }
 
     private double leftVelocity() {
@@ -113,33 +80,12 @@ public class Intake extends SubsystemBase {
         return rightEncoder.getVelocity();
     }
 
-    private double getAverageVelocity() {
-        return (rightVelocity() + leftVelocity()) / 2;
-    }
-
-    private double getAbsoluteAverageAcceleration() {
-        return Math.abs((nowVelocity - lastVelocity) / 0.02);
-    }
-
     public boolean hasCrate() {
-        if (useVelocityDetection) {
-            if (lastSet > 0) {
-                // System.out.println(rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD);
-                return rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD;
-            } else {
-                // System.out.println("Intake is not spinning forward, cannot detect if crate is grabbed");
-                return false; // should this throw an error?
-            }
+        if (lastSet > 0) {
+            // System.out.println(rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD);
+            return rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD;
         } else {
-            return nowVelocity / getAverageCurrent() < IntakeConstants.STALL_VELOCITY_CURRENT_THRESHOLD && getAbsoluteAverageAcceleration() < IntakeConstants.STALL_ACCELERATION_THRESHOLD;
-        }
-    }
-
-    public boolean isCrateEjected() {
-        if (lastSet < 0) {
-            return nowVelocity / getAverageCurrent() > IntakeConstants.EJECTING_VELOCITY_CURRENT_THRESHOLD && getAbsoluteAverageAcceleration() > IntakeConstants.STALL_ACCELERATION_THRESHOLD;
-        } else {
-            // System.out.println("Intake is not reversing, cannot detect if crate is ejected");
+            // System.out.println("Intake is not spinning forward, cannot detect if crate is grabbed");
             return false; // should this throw an error?
         }
     }

@@ -144,14 +144,6 @@ public final class Constants {
         public static final double THROTTLE_FORWARD = 0.75;
         public static final double THROTTLE_REVERSE = 0.25;
 
-        public static final int PDP_SLOT_1 = 2; // TODO: check if these are correct by substituting them for other slots
-        public static final int PDP_SLOT_2 = 3; // TODO: check if these are correct by substituting them for other slots
-
-        public static final double STALL_VELOCITY_CURRENT_THRESHOLD = 1;    // TODO this is prolly wrong
-        public static final double STALL_ACCELERATION_THRESHOLD = 1;        // TODO this is prolly wrong
-        public static final double EJECTING_VELOCITY_CURRENT_THRESHOLD = 5; // TODO this is prolly wrong
-        public static final double EJECTING_ACCELERATION_THRESHOLD = 2;     // TODO this is prolly wrong
-
         public static final double LEFT_VELOCITY_THRESHOLD = 10;  // rps
         public static final double RIGHT_VELOCITY_THRESHOLD = 500;  // rps
         public static final double EJECT_CRATE_RUNTIME = 0.5; // seconds
