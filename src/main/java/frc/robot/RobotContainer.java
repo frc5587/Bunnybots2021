@@ -67,6 +67,7 @@ public class RobotContainer {
             new AutoPath("drop off right box"), AutoConstants.RAMSETE_CONSTANTS);
     private final RamseteCommandWrapper backupAndCenter = new RamseteCommandWrapper(ssDrivetrain,
             new AutoPath("backup and center"), AutoConstants.RAMSETE_CONSTANTS);
+    // Currently unused auto paths, but may be used in the future
     private final RamseteCommandWrapper getRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
             new AutoPath("get right box 2"), AutoConstants.RAMSETE_CONSTANTS);
     private final RamseteCommandWrapper dropOffRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
@@ -112,8 +113,6 @@ public class RobotContainer {
         POVButton dpadUp = new POVButton(xboxController, 0);
         // DPad Down for lower arm setpoint
         POVButton dpadDown = new POVButton(xboxController, 180);
-        // right trigger for manual arm control
-        Trigger rightTrigger = new Trigger(() -> xboxController.getTrigger(Hand.kRight));
         // arm limit switch
         Trigger armLimitSwitch = new Trigger(() -> arm.getLimitSwitchValue());
 
@@ -127,18 +126,16 @@ public class RobotContainer {
 
         // Intake
         /** 
-        * when y button is active, move intake forwards 
+        * when y button is active, move intake inwards. 
         * when the y button is inactive, stop.
         */
-        yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
-        // yButton.and(leftTrigger.negate()).whenActive(intakeCrate);
+        yButton.and(leftTrigger.negate()).whenActive(intake::in, intake).whenInactive(intake::stop, intake);
 
         /** 
-        * when y button & left trigger are active, move intake backwards
+        * when y button & left trigger are active, move intake outwards.
         * when the y button & left trigger are inactive, stop.
         */
-        yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
-        // yButton.and(leftTrigger).whenActive(ejectCrate);
+        yButton.and(leftTrigger).whenActive(intake::out, intake).whenInactive(intake::stop, intake);
 
         // Arm
         armLimitSwitch.whenActive(arm::resetEncoders);

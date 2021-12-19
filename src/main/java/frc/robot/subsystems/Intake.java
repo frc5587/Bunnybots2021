@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
@@ -41,17 +42,17 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Moves intake forwards
+     * Moves intake inwards
      */
-    public void forward() {
+    public void in() {
         intakeMotors.set(IntakeConstants.THROTTLE_FORWARD);
         lastSet = IntakeConstants.THROTTLE_FORWARD;
     }
     
     /**
-     * Moves intake backwards
+     * Moves intake outwards
      */
-    public void backward() {
+    public void out() {
         intakeMotors.set(-IntakeConstants.THROTTLE_REVERSE);
         lastSet = -IntakeConstants.THROTTLE_REVERSE;
     }

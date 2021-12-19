@@ -111,7 +111,7 @@ public final class Constants {
         public static final double HIGHER_SETPOINT = Math.toRadians(60);
 
         public static final double LOWER_MOVE_THRESHOLD = Math.toRadians(10);
-        public static final double HIGHER_MOVE_THRESHOLD = Math.toRadians(40); // TODO this may need to change
+        public static final double HIGHER_MOVE_THRESHOLD = Math.toRadians(40);
         public static final int ZERO_OFFSET_TICKS = 313;
         public static final double[] SOFT_LIMITS = new double[]{0, Math.toRadians(65)};
 

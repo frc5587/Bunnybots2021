@@ -116,7 +116,7 @@ public class SuperSimpleDrivetrain extends SubsystemBase {
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         leftGroup.setVoltage(-leftVolts);
-        rightGroup.setVoltage(rightVolts); // TODO this might need to be negative or smth
+        rightGroup.setVoltage(rightVolts);
         drive.feed();
     }
 

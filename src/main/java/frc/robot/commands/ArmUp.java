@@ -5,7 +5,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.Arm;
 
 public class ArmUp extends CommandBase {
-    private static Arm arm;
+    private Arm arm;
     
     public ArmUp(Arm arm) {
         this.arm = arm;

@@ -14,7 +14,7 @@ public class IntakeCrate extends CommandBase {
 
     @Override
     public void initialize() {
-        intake.forward();
+        intake.in();
     }
 
     @Override

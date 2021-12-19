@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.ArmConstants;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import org.frc5587.lib.subsystems.PivotingArmBase;
