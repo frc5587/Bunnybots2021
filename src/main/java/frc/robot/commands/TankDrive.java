@@ -3,14 +3,14 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SuperSimpleDrivetrain;
+import frc.robot.subsystems.Drivetrain;
 
 public class TankDrive extends CommandBase {
-    private final SuperSimpleDrivetrain drivetrain;
+    private final Drivetrain drivetrain;
     private final DoubleSupplier leftThrottleSupplier, rightThrottleSupplier;
 
     // TankDrive uses input from two joysticks to drive each side of the robot.
-    public TankDrive(SuperSimpleDrivetrain drivetrain, DoubleSupplier leftThrottleSupplier, DoubleSupplier rightThrottleSupplier) {
+    public TankDrive(Drivetrain drivetrain, DoubleSupplier leftThrottleSupplier, DoubleSupplier rightThrottleSupplier) {
         addRequirements(drivetrain);
 
         this.drivetrain = drivetrain;

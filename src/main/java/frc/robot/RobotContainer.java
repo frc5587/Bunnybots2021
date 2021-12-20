@@ -18,7 +18,7 @@ import frc.robot.commands.ArmUp;
 import frc.robot.commands.EjectCrate;
 import frc.robot.commands.IntakeCrate;
 import frc.robot.subsystems.BunnyDumper;
-import frc.robot.subsystems.SuperSimpleDrivetrain;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Arm;
@@ -48,12 +48,12 @@ public class RobotContainer {
     private final DeadbandJoystick joy = new DeadbandJoystick(0, 1.5);
     private final DeadbandXboxController xboxController = new DeadbandXboxController(1);
     // Subsystems
-    private final SuperSimpleDrivetrain ssDrivetrain = new SuperSimpleDrivetrain();
+    private final Drivetrain drivetrain = new Drivetrain();
     private final BunnyDumper bunnyDumper = new BunnyDumper();
     private final Intake intake = new Intake();
     private final Arm arm = new Arm();
     // Commands
-    private final ArcadeDrive arcadeDrive = new ArcadeDrive(ssDrivetrain, joy::getY, () -> -joy.getXCurveDampened());
+    private final ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, joy::getY, () -> -joy.getXCurveDampened());
     private final IntakeCrate intakeCrate = new IntakeCrate(intake);
     private final EjectCrate ejectCrate = new EjectCrate(intake);
     private final ArmUp armUp = new ArmUp(arm);
@@ -61,26 +61,26 @@ public class RobotContainer {
     private final ArmUp autoArmUp = new ArmUp(arm);
     private final ArmDown autoArmDown = new ArmDown(arm);
     // Auto paths
-    private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper getRightBox = new RamseteCommandWrapper(drivetrain,
             new AutoPath("get right box"), AutoConstants.RAMSETE_CONSTANTS);
-    private final RamseteCommandWrapper dropOffRightBox = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper dropOffRightBox = new RamseteCommandWrapper(drivetrain,
             new AutoPath("drop off right box"), AutoConstants.RAMSETE_CONSTANTS);
-    private final RamseteCommandWrapper backupAndCenter = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper backupAndCenter = new RamseteCommandWrapper(drivetrain,
             new AutoPath("backup and center"), AutoConstants.RAMSETE_CONSTANTS);
     // Currently unused auto paths, but may be used in the future
-    private final RamseteCommandWrapper getRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper getRightBox2 = new RamseteCommandWrapper(drivetrain,
             new AutoPath("get right box 2"), AutoConstants.RAMSETE_CONSTANTS);
-    private final RamseteCommandWrapper dropOffRightBox2 = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper dropOffRightBox2 = new RamseteCommandWrapper(drivetrain,
             new AutoPath("drop off right box 2"), AutoConstants.RAMSETE_CONSTANTS);
-    private final RamseteCommandWrapper backupAndCenter2 = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper backupAndCenter2 = new RamseteCommandWrapper(drivetrain,
             new AutoPath("backup and center 2"), AutoConstants.RAMSETE_CONSTANTS);
     // Testing auto paths
-    private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(ssDrivetrain, new AutoPath("s path"),
-            AutoConstants.RAMSETE_CONSTANTS).resetOdometryOnStart();
-    private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(drivetrain, new AutoPath("s path"),
+            AutoConstants.RAMSETE_CONSTANTS).setOdometryToFirstPoseOnStart();
+    private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(drivetrain,
             new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)),
             AutoConstants.RAMSETE_CONSTANTS);
-    private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(ssDrivetrain,
+    private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(drivetrain,
             new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)),
             AutoConstants.RAMSETE_CONSTANTS);
 
@@ -88,8 +88,8 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        // make ssDrivetrain use arcadeDrive to drive
-        ssDrivetrain.setDefaultCommand(arcadeDrive);
+        // make drivetrain use arcadeDrive to drive
+        drivetrain.setDefaultCommand(arcadeDrive);
         // Configure the button bindings
         configureButtonBindings();
     }
@@ -159,7 +159,7 @@ public class RobotContainer {
         // SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown); 
         // return crawlBg;
         // * 1 Box
-        return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), autoArmUp, dropOffRightBox, autoArmDown, ejectCrate, backupAndCenter);
+        return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.setOdometryToFirstPoseOnStart(), intakeCrate), autoArmUp, dropOffRightBox, autoArmDown, ejectCrate, backupAndCenter);
 
         // * 2 Boxes
         // return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, new SequentialCommandGroup(autoArmDown, ejectCrate)), new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, new SequentialCommandGroup(autoArmDown, ejectCrate)), backupAndCenter2);
