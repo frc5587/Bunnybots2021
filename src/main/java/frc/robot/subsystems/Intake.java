@@ -26,7 +26,9 @@ public class Intake extends SubsystemBase {
         configureMotors();
     }
 
-    // @Override
+    /**
+     * Configures the motors, this includes inversions, current limits, and idle modes.
+     */
     public void configureMotors() {
         rightIntake.restoreFactoryDefaults();
         leftIntake.restoreFactoryDefaults();
@@ -65,14 +67,6 @@ public class Intake extends SubsystemBase {
         lastSet = 0;
     }
 
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("has crate", hasCrate()? 1:0);
-
-        SmartDashboard.putNumber("left v", leftVelocity());
-        SmartDashboard.putNumber("right v", rightVelocity());
-    }
-
     private double leftVelocity() {
         return leftEncoder.getVelocity();
     }
@@ -81,13 +75,16 @@ public class Intake extends SubsystemBase {
         return rightEncoder.getVelocity();
     }
 
+    /**
+     * Detects crate if right motors is stalled and left motor is spinning under very slight load. This is just a result of the elastic on the left side of the intake.
+     * 
+     * @return whether crate is detected
+     */
     public boolean hasCrate() {
         if (lastSet > 0) {
-            // System.out.println(rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD);
             return rightVelocity() > IntakeConstants.RIGHT_VELOCITY_THRESHOLD && leftVelocity() < IntakeConstants.LEFT_VELOCITY_THRESHOLD;
         } else {
-            // System.out.println("Intake is not spinning forward, cannot detect if crate is grabbed");
-            return false; // should this throw an error?
+            return false; 
         }
     }
 }

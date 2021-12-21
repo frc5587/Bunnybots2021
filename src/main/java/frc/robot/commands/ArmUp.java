@@ -7,6 +7,12 @@ import frc.robot.subsystems.Arm;
 public class ArmUp extends CommandBase {
     private Arm arm;
     
+    /**
+     * This command is designed for auto, because an end condition was needed. It
+     * moves the arm up and ends when its close enough
+     * 
+     * @param arm arm subsystem
+     */
     public ArmUp(Arm arm) {
         this.arm = arm;
 

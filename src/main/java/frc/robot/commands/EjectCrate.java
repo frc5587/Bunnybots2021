@@ -9,7 +9,13 @@ public class EjectCrate extends CommandBase {
     private final Intake intake;
     private final Timer timer = new Timer();
 
-    public EjectCrate(Intake intake) {   
+    /**
+     * This is a simple timer based command. It runs the intake in reverse for 0.5
+     * seconds as we determined that was enough to consistently eject any crate.
+     * 
+     * @param intake intake subsystem
+     */
+    public EjectCrate(Intake intake) {
         this.intake = intake;
 
         addRequirements(intake);

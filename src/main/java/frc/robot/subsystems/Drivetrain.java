@@ -19,11 +19,22 @@ public class Drivetrain extends DrivetrainBase {
             DrivetrainConstants.ENCODER_EDGES_PER_REV, DrivetrainConstants.GEARING,
             DrivetrainConstants.FLIP_LEFT_ENCODERS, DrivetrainConstants.FLIP_RIGHT_ENCODERS);
 
+    /**
+     * Default constructor that initializes the motors to be passed in.
+     */
     public Drivetrain() {
         this(new WPI_TalonFX(DrivetrainConstants.LEFT_LEADER), new WPI_TalonFX(DrivetrainConstants.LEFT_FOLLOWER),
                 new WPI_TalonFX(DrivetrainConstants.RIGHT_LEADER), new WPI_TalonFX(DrivetrainConstants.RIGHT_FOLLOWER));
     }
 
+    /**
+     * Takes the motors and passes them into the {@link DrivetrainBase} and the initializes the motors objects (used in `configureMotors()`)
+     * 
+     * @param leftLeader talonFX left leader
+     * @param leftFollower talonFX left follower
+     * @param rightLeader talonFX right leader
+     * @param rightFollower talonFX right follower
+     */
     public Drivetrain(WPI_TalonFX leftLeader, WPI_TalonFX leftFollower, WPI_TalonFX rightLeader,
             WPI_TalonFX rightFollower) {
         super(new SpeedControllerGroup(leftLeader, leftFollower), new SpeedControllerGroup(rightLeader, rightFollower),
@@ -35,6 +46,9 @@ public class Drivetrain extends DrivetrainBase {
         this.rightFollower = rightFollower;
     }
 
+    /**
+     * Configures the motors. This is automatically called in the constructor of {@link DrivetrainBase}.
+     */
     @Override
     public void configureMotors() {
         leftLeader.configFactoryDefault();
@@ -59,6 +73,8 @@ public class Drivetrain extends DrivetrainBase {
 
     }
 
+    // * ENCODER METHODS
+    
     @Override
     protected double getRightPositionTicks() {
         return rightLeader.getSelectedSensorPosition();
