@@ -23,7 +23,7 @@ public class EjectCrate extends CommandBase {
 
     @Override
     public void initialize() {
-        intake.out();
+        intake.backward();
         timer.reset();
         timer.start();
     }

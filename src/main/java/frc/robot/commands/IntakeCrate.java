@@ -22,7 +22,7 @@ public class IntakeCrate extends CommandBase {
 
     @Override
     public void initialize() {
-        intake.in();
+        intake.forward();
     }
 
     @Override
