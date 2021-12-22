@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.frc5587.lib.subsystems.SimpleMotorBase;
@@ -22,7 +23,7 @@ public class Intake extends SimpleMotorBase {
     private double lastSet = 0;
 
     public Intake() {
-        super(new SpeedController[]{rightIntake, leftIntake}, IntakeConstants.THROTTLE_FORWARD, IntakeConstants.THROTTLE_REVERSE);
+        super(new SpeedControllerGroup(rightIntake, leftIntake), IntakeConstants.THROTTLE_FORWARD, IntakeConstants.THROTTLE_REVERSE);
         configureMotors();
     }
 
