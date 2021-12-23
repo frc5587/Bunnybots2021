@@ -7,28 +7,29 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.frc5587.lib.subsystems.SimpleMotorBase;
 
 import frc.robot.Constants.IntakeConstants;
 
-public class Intake extends SubsystemBase {
-    private final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
-    private final CANSparkMax leftIntake = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushless);
+public class Intake extends SimpleMotorBase {
+    private static final CANSparkMax rightIntake = new CANSparkMax(IntakeConstants.RIGHT_MOTOR, MotorType.kBrushless);
+    private static final CANSparkMax leftIntake = new CANSparkMax(IntakeConstants.LEFT_MOTOR, MotorType.kBrushless);
 
     private final CANEncoder rightEncoder = rightIntake.getEncoder();
     private final CANEncoder leftEncoder = leftIntake.getEncoder();
 
-    private final SpeedControllerGroup intakeMotors = new SpeedControllerGroup(leftIntake, rightIntake);
-
     private double lastSet = 0;
 
     public Intake() {
+        super(new SpeedControllerGroup(rightIntake, leftIntake), IntakeConstants.THROTTLE_FORWARD, IntakeConstants.THROTTLE_REVERSE);
         configureMotors();
     }
 
     /**
      * Configures the motors, this includes inversions, current limits, and idle modes.
      */
+    @Override
     public void configureMotors() {
         rightIntake.restoreFactoryDefaults();
         leftIntake.restoreFactoryDefaults();
@@ -43,28 +44,12 @@ public class Intake extends SubsystemBase {
         leftIntake.setIdleMode(IdleMode.kBrake);
     }
 
-    /**
-     * Moves intake inwards
-     */
-    public void in() {
-        intakeMotors.set(IntakeConstants.THROTTLE_FORWARD);
-        lastSet = IntakeConstants.THROTTLE_FORWARD;
-    }
-    
-    /**
-     * Moves intake outwards
-     */
-    public void out() {
-        intakeMotors.set(-IntakeConstants.THROTTLE_REVERSE);
-        lastSet = -IntakeConstants.THROTTLE_REVERSE;
-    }
-    
-    /**
-     * Stops intake
-     */
-    public void stop() {
-        intakeMotors.set(IntakeConstants.HOLD);
-        lastSet = 0;
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("has crate", hasCrate()? 1:0);
+
+        SmartDashboard.putNumber("left v", leftVelocity());
+        SmartDashboard.putNumber("right v", rightVelocity());
     }
 
     private double leftVelocity() {

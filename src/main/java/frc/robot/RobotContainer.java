@@ -129,13 +129,13 @@ public class RobotContainer {
         * when y button is active, move intake inwards. 
         * when the y button is inactive, stop.
         */
-        yButton.and(leftTrigger.negate()).whenActive(intake::in, intake).whenInactive(intake::stop, intake);
+        yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
 
         /** 
         * when y button & left trigger are active, move intake outwards.
         * when the y button & left trigger are inactive, stop.
         */
-        yButton.and(leftTrigger).whenActive(intake::out, intake).whenInactive(intake::stop, intake);
+        yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
 
         // Arm
         armLimitSwitch.whenActive(arm::resetEncoders);
