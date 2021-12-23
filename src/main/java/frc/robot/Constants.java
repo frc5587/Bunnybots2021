@@ -52,15 +52,9 @@ public final class Constants {
         public static final boolean LEFT_SIDE_INVERTED = true;
         public static final boolean RIGHT_SIDE_INVERTED = true;
 
-        // tbh idk why we even should need to do this damn the talon fx api
         public static final boolean FLIP_LEFT_ENCODERS = true;
         public static final boolean FLIP_RIGHT_ENCODERS = false;
-        
-        // PID constants
-        public static final FPID TURN_FPID = new FPID(0, 0.1, 0, 0.009);
-        public static final double TURN_PID_TOLERANCE_DEG = 0.5;
-        public static final double TURN_PID_FORWARD_THROTTLE = 0;
-        public static final double TURN_PID_UPDATE_PERIOD_SEC = 0.010;
+
         public static final boolean INVERT_GYRO_DIRECTION = true;
 
         // motor current limit constants
