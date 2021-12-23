@@ -78,10 +78,12 @@ public class RobotContainer {
     private final RamseteCommandWrapper sPath = new RamseteCommandWrapper(drivetrain, new AutoPath("s path"),
             AutoConstants.RAMSETE_CONSTANTS).setOdometryToFirstPoseOnStart();
     private final RamseteCommandWrapper y2Meters = new RamseteCommandWrapper(drivetrain,
-            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(0, 2, new Rotation2d(0)),
+            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(),
+            new Pose2d(0, 2, new Rotation2d(0)),
             AutoConstants.RAMSETE_CONSTANTS);
     private final RamseteCommandWrapper x2Meters = new RamseteCommandWrapper(drivetrain,
-            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(), new Pose2d(2, 0, new Rotation2d(0)),
+            new Pose2d(0, 0, new Rotation2d(0)), new ArrayList<Translation2d>(),
+            new Pose2d(2, 0, new Rotation2d(0)),
             AutoConstants.RAMSETE_CONSTANTS);
 
     /**
@@ -118,23 +120,24 @@ public class RobotContainer {
 
         // Bunny Dumper
         /*
-        * when b button and left trigger are pressed together, extend the pistons. when
-        * the two buttons are released, retract the pistons
-        */
+         * when b button and left trigger are pressed together, extend the pistons. when
+         * the two buttons are released, retract the pistons
+         */
         bButton.and(leftTrigger).whenActive(bunnyDumper::extend, bunnyDumper)
                 .whenInactive(bunnyDumper::retract, bunnyDumper);
 
         // Intake
-        /** 
-        * when y button is active, move intake inwards. 
-        * when the y button is inactive, stop.
-        */
-        yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop, intake);
+        /**
+         * when y button is active, move intake inwards.
+         * when the y button is inactive, stop.
+         */
+        yButton.and(leftTrigger.negate()).whenActive(intake::forward, intake).whenInactive(intake::stop,
+                intake);
 
-        /** 
-        * when y button & left trigger are active, move intake outwards.
-        * when the y button & left trigger are inactive, stop.
-        */
+        /**
+         * when y button & left trigger are active, move intake outwards.
+         * when the y button & left trigger are inactive, stop.
+         */
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
 
         // Arm
@@ -144,12 +147,14 @@ public class RobotContainer {
         armLimitSwitch.whenActive(arm::resetEncoders);
 
         /**
-         * when the up button on the d-pad is pressed, move the arm up to a predefined setpoint
+         * when the up button on the d-pad is pressed, move the arm up to a predefined
+         * setpoint
          */
         dpadUp.whenPressed(armUp);
 
         /**
-         * when the down button on the d-pad is pressed, move the arm down to a predefined setpoint
+         * when the down button on the d-pad is pressed, move the arm down to a
+         * predefined setpoint
          */
         dpadDown.whenPressed(armDown);
     }
@@ -160,22 +165,39 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // * simple tests
-        // return x2Meters.zeroOdometryOnStart(); 
+        // * Simple tests
+        // Use these to verify odometry, gains, and encoder stuff. For the x2Meters, lay
+        // out a measuring tape to verify its moving 2 meters, and for the getRightBox,
+        // set it up on the field and make sure its going where you expect.
+        // return x2Meters.zeroOdometryOnStart();
         // return getRightBox.resetOdometryOnStart();
 
-        // Command ejectAndArmDown = new SequentialCommandGroup(autoArmDown, ejectCrate);
-        // SequentialCommandGroup getBoxOne = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, ejectAndArmDown);
-        // SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, ejectAndArmDown); 
+        // Command ejectAndArmDown = new SequentialCommandGroup(autoArmDown,
+        // ejectCrate);
+        // SequentialCommandGroup getBoxOne = new SequentialCommandGroup(new
+        // ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp,
+        // dropOffRightBox, ejectAndArmDown);
+        // SequentialCommandGroup getBoxTwo = new SequentialCommandGroup(new
+        // ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2,
+        // ejectAndArmDown);
         // return crawlBg;
         // * 1 Box
-        return new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.setOdometryToFirstPoseOnStart(), intakeCrate), autoArmUp, dropOffRightBox, autoArmDown, ejectCrate, backupAndCenter);
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(getRightBox.setOdometryToFirstPoseOnStart(), intakeCrate),
+                autoArmUp, dropOffRightBox, autoArmDown, ejectCrate, backupAndCenter);
 
         // * 2 Boxes
-        // return new SequentialCommandGroup(new SequentialCommandGroup(new ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp, dropOffRightBox, new SequentialCommandGroup(autoArmDown, ejectCrate)), new SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate), armUp, dropOffRightBox2, new SequentialCommandGroup(autoArmDown, ejectCrate)), backupAndCenter2);
+        // return new SequentialCommandGroup(new SequentialCommandGroup(new
+        // ParallelCommandGroup(getRightBox.resetOdometryOnStart(), intakeCrate), armUp,
+        // dropOffRightBox, new SequentialCommandGroup(autoArmDown, ejectCrate)), new
+        // SequentialCommandGroup(new ParallelCommandGroup(getRightBox2, intakeCrate),
+        // armUp, dropOffRightBox2, new SequentialCommandGroup(autoArmDown,
+        // ejectCrate)), backupAndCenter2);
 
         // * Dry runs
-        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, backupAndCenter);
-        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(), dropOffRightBox, getRightBox2, dropOffRightBox2, backupAndCenter2);
+        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(),
+        // dropOffRightBox, backupAndCenter);
+        // return new SequentialCommandGroup(getRightBox.resetOdometryOnStart(),
+        // dropOffRightBox, getRightBox2, dropOffRightBox2, backupAndCenter2);
     }
 }
