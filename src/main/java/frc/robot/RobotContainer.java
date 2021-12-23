@@ -138,9 +138,19 @@ public class RobotContainer {
         yButton.and(leftTrigger).whenActive(intake::backward, intake).whenInactive(intake::stop, intake);
 
         // Arm
+        /**
+         * when the limit switch is pressed down, reset the encoders
+         */
         armLimitSwitch.whenActive(arm::resetEncoders);
 
+        /**
+         * when the up button on the d-pad is pressed, move the arm up to a predefined setpoint
+         */
         dpadUp.whenPressed(armUp);
+
+        /**
+         * when the down button on the d-pad is pressed, move the arm down to a predefined setpoint
+         */
         dpadDown.whenPressed(armDown);
     }
 
