@@ -26,11 +26,10 @@ import edu.wpi.first.wpilibj.util.Units;
  */
 public final class Constants {
     public static final class AutoConstants {
-        public static final double KS = 0.61049;//0.607;//0.614;// 0.60429;//0.602;
-        public static final double KV = 2.4818;//2.5;//2.4847;//2.4858;//1.18;
-        public static final double KA = 0.23997;//0.219;//0.25027;//0.24717;//0.0965;
-        public static final double KP = 0;//2.17;//3.1067;//3.1494;//2.18;
-        public static final double KD = 0;
+        public static final double KS = 0.61049;
+        public static final double KV = 2.4818;
+        public static final double KA = 0.23997;
+        public static final double KP = 3.0689;  // At competition, this was apparently set to 0
         public static final double TRACK_WIDTH = 0.683;
 
         public static final double MAXIMUM_VELOCITY = 1; // m/s
@@ -70,13 +69,10 @@ public final class Constants {
     
         public static final int TICKS_PER_REV = 8192;
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
-        // public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2;
         public static final int HISTORY_LIMIT = 32;
 
         public static final int ENCODER_EDGES_PER_REV = 2048;
         public static final double GEARING = (54./20.) * (50./12.);
-
-        public static final double CRAWL_THROTTLE = 0.1;
 
         public static final double VELOCITY_COEFFICIENT = 10; // CTRE measures velocity in units per 100ms, so this makes it units per 1s
 
