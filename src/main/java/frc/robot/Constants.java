@@ -6,7 +6,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.auto.RamseteCommandWrapper.RamseteConstants;
-import org.frc5587.lib.pid.FPID;
 import org.frc5587.lib.pid.PID;
 
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
@@ -83,6 +82,13 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
+        // ports
+        public static final int LIMIT_SWITCH = 0;
+        public static final int ARM_LEADER = 20;
+        public static final int ARM_FOLLOWER = 21;
+
+        public static final boolean MOTORS_INVERTED = false;
+        public static final boolean LIMIT_SWITCH_INVERTED = true;
         // PID constants
         public static final double K_P = 3.5415;
         public static final double K_D = 0.10184;
@@ -112,14 +118,6 @@ public final class Constants {
         public static final double HIGHER_MOVE_THRESHOLD = Math.toRadians(40);
         public static final int ZERO_OFFSET_TICKS = 313;
         public static final double[] SOFT_LIMITS = new double[]{0, Math.toRadians(65)};
-
-        // ports
-        public static final int LIMIT_SWITCH = 0;
-        public static final int ARM_LEADER = 20;
-        public static final int ARM_FOLLOWER = 21;
-
-        public static final boolean MOTORS_INVERTED = false;
-        public static final boolean LIMIT_SWITCH_INVERTED = true;
     }
 
     public static final class LEDConstants {

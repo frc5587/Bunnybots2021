@@ -46,7 +46,7 @@ public class Intake extends SimpleMotorBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("has crate", hasCrate()? 1:0);
+        SmartDashboard.putNumber("has crate", hasCrate() ? 1 : 0);
 
         SmartDashboard.putNumber("left v", leftVelocity());
         SmartDashboard.putNumber("right v", rightVelocity());
