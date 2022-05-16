@@ -6,7 +6,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 
 import org.frc5587.lib.auto.RamseteCommandWrapper.RamseteConstants;
-import org.frc5587.lib.pid.FPID;
 import org.frc5587.lib.pid.PID;
 
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
@@ -26,11 +25,10 @@ import edu.wpi.first.wpilibj.util.Units;
  */
 public final class Constants {
     public static final class AutoConstants {
-        public static final double KS = 0.61049;//0.607;//0.614;// 0.60429;//0.602;
-        public static final double KV = 2.4818;//2.5;//2.4847;//2.4858;//1.18;
-        public static final double KA = 0.23997;//0.219;//0.25027;//0.24717;//0.0965;
-        public static final double KP = 0;//2.17;//3.1067;//3.1494;//2.18;
-        public static final double KD = 0;
+        public static final double KS = 0.61049;
+        public static final double KV = 2.4818;
+        public static final double KA = 0.23997;
+        public static final double KP = 3.0689;  // At competition, this was apparently set to 0
         public static final double TRACK_WIDTH = 0.683;
 
         public static final double MAXIMUM_VELOCITY = 1; // m/s
@@ -51,12 +49,10 @@ public final class Constants {
 
         public static final boolean LEFT_SIDE_INVERTED = true;
         public static final boolean RIGHT_SIDE_INVERTED = true;
-        
-        // PID constants
-        public static final FPID TURN_FPID = new FPID(0, 0.1, 0, 0.009);
-        public static final double TURN_PID_TOLERANCE_DEG = 0.5;
-        public static final double TURN_PID_FORWARD_THROTTLE = 0;
-        public static final double TURN_PID_UPDATE_PERIOD_SEC = 0.010;
+
+        public static final boolean FLIP_LEFT_ENCODERS = true;
+        public static final boolean FLIP_RIGHT_ENCODERS = false;
+
         public static final boolean INVERT_GYRO_DIRECTION = true;
 
         // motor current limit constants
@@ -72,19 +68,23 @@ public final class Constants {
     
         public static final int TICKS_PER_REV = 8192;
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(6);
-        // public static final double WHEEL_RADIUS_METERS = WHEEL_DIAMETER_METERS / 2;
         public static final int HISTORY_LIMIT = 32;
 
         public static final int ENCODER_EDGES_PER_REV = 2048;
         public static final double GEARING = (54./20.) * (50./12.);
-
-        public static final double CRAWL_THROTTLE = 0.1;
 
         public static final double VELOCITY_COEFFICIENT = 10; // CTRE measures velocity in units per 100ms, so this makes it units per 1s
 
     }
 
     public static final class ArmConstants {
+        // ports
+        public static final int LIMIT_SWITCH = 0;
+        public static final int ARM_LEADER = 20;
+        public static final int ARM_FOLLOWER = 21;
+
+        public static final boolean MOTORS_INVERTED = false;
+        public static final boolean LIMIT_SWITCH_INVERTED = true;
         // PID constants
         public static final double K_P = 3.5415;
         public static final double K_D = 0.10184;
@@ -111,17 +111,9 @@ public final class Constants {
         public static final double HIGHER_SETPOINT = Math.toRadians(60);
 
         public static final double LOWER_MOVE_THRESHOLD = Math.toRadians(10);
-        public static final double HIGHER_MOVE_THRESHOLD = Math.toRadians(40); // TODO this may need to change
+        public static final double HIGHER_MOVE_THRESHOLD = Math.toRadians(40);
         public static final int ZERO_OFFSET_TICKS = 313;
         public static final double[] SOFT_LIMITS = new double[]{0, Math.toRadians(65)};
-
-        // ports
-        public static final int LIMIT_SWITCH = 0;
-        public static final int ARM_LEADER = 20;
-        public static final int ARM_FOLLOWER = 21;
-
-        public static final boolean MOTORS_INVERTED = false;
-        public static final boolean LIMIT_SWITCH_INVERTED = true;
     }
 
     public static final class LEDConstants {
@@ -142,15 +134,7 @@ public final class Constants {
         public static final int FREE_LIMIT = 25;
         // motor speeds
         public static final double THROTTLE_FORWARD = 0.75;
-        public static final double THROTTLE_REVERSE = 0.5;
-
-        public static final int PDP_SLOT_1 = 2; // TODO: check if these are correct by substituting them for other slots
-        public static final int PDP_SLOT_2 = 3; // TODO: check if these are correct by substituting them for other slots
-
-        public static final double STALL_VELOCITY_CURRENT_THRESHOLD = 1;    // TODO this is prolly wrong
-        public static final double STALL_ACCELERATION_THRESHOLD = 1;        // TODO this is prolly wrong
-        public static final double EJECTING_VELOCITY_CURRENT_THRESHOLD = 5; // TODO this is prolly wrong
-        public static final double EJECTING_ACCELERATION_THRESHOLD = 2;     // TODO this is prolly wrong
+        public static final double THROTTLE_REVERSE = 0.25;
 
         public static final double LEFT_VELOCITY_THRESHOLD = 10;  // rps
         public static final double RIGHT_VELOCITY_THRESHOLD = 500;  // rps

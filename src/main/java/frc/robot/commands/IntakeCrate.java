@@ -6,7 +6,15 @@ import frc.robot.subsystems.Intake;
 public class IntakeCrate extends CommandBase {
     private final Intake intake;
 
-    public IntakeCrate(Intake intake) {   
+    /**
+     * Keeps running the intake inwards until it detects that it has a crate. This
+     * is done by the right wheel being stalled and the left wheel spinning somewhat
+     * free. This happens because of how the eleatic band pushed on the left side of
+     * the crate.
+     * 
+     * @param intake intake subsystem
+     */
+    public IntakeCrate(Intake intake) {
         this.intake = intake;
 
         addRequirements(intake);

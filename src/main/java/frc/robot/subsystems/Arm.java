@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.ArmConstants;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import org.frc5587.lib.subsystems.PivotingArmBase;
@@ -59,17 +58,11 @@ public class Arm extends PivotingArmBase {
     
     @Override
     public void configureMotors() {
-        // try {
-            for(WPI_TalonFX motor : motors) {
-                motor.configFactoryDefault();
-                motor.setNeutralMode(NeutralMode.Brake);
-                motor.setInverted(ArmConstants.MOTORS_INVERTED);
-                // motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-            }
-        // }
-        // catch(NullPointerException e) {
-        //     System.out.println("NullPointerException " + e + " from arm motor");
-        // }
+        for(WPI_TalonFX motor : motors) {
+            motor.configFactoryDefault();
+            motor.setNeutralMode(NeutralMode.Brake);
+            motor.setInverted(ArmConstants.MOTORS_INVERTED);
+        }
     }
     
     public void moveUp() {

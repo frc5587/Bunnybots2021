@@ -26,7 +26,7 @@ public class TankDrive extends CommandBase {
     public void execute() {
         var leftThrottle = leftThrottleSupplier.getAsDouble();
         var rightThrottle = rightThrottleSupplier.getAsDouble();
-        drivetrain.tankDrive(leftThrottle, rightThrottle);
+        drivetrain.tankDriveVolts(leftThrottle, rightThrottle);
     }
 
     // Called once the command ends or is interrupted.
