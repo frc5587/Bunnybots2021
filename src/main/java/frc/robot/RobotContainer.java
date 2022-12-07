@@ -11,7 +11,11 @@ import org.frc5587.lib.control.DeadbandJoystick;
 import org.frc5587.lib.control.DeadbandXboxController;
 
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.DDRDrive;
 import frc.robot.subsystems.Drivetrain;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -30,18 +34,28 @@ public class RobotContainer {
         private final Drivetrain drivetrain = new Drivetrain();
 
         // Commands
-        // private ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, () -> -joystick.getX(), () -> joystick.getY());
-        private ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, buttonToValue(xboxController::getXButton, xboxController::getBButton, Constants.DrivetrainConstants.DDR_FWD), buttonToValue(xboxController::getYButton, xboxController::getAButton, Constants.DrivetrainConstants.DDR_TURN));
+        private ArcadeDrive arcadeDrive = new ArcadeDrive(drivetrain, () -> -joystick.getX(), () -> joystick.getY());
+        private ArcadeDrive ddrArcadeDrive = new ArcadeDrive(drivetrain, buttonToValue(xboxController::getXButton, xboxController::getBButton, Constants.DrivetrainConstants.DDR_FWD), buttonToValue(xboxController::getYButton, xboxController::getAButton, Constants.DrivetrainConstants.DDR_TURN));
+        private DDRDrive ddrDrive = new DDRDrive(drivetrain, buttonToValue(xboxController::getXButton, xboxController::getBButton, Constants.DrivetrainConstants.DDR_FWD), buttonToValue(xboxController::getYButton, xboxController::getAButton, Constants.DrivetrainConstants.DDR_TURN));
+
+        // Other
+        private NetworkTableEntry chooseDriveMode = SmartDashboard.getEntry("Drive Mode");
+
+        SendableChooser<Command> driveChooser = new SendableChooser<Command>();
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
-                // make drivetrain use arcadeDrive to drive
-                drivetrain.setDefaultCommand(arcadeDrive);
-                
                 // Configure the button bindings
                 configureButtonBindings();
+
+                driveChooser.setDefaultOption("Arcade Drive", arcadeDrive);
+                driveChooser.addOption("DDR Arcade Drive", ddrArcadeDrive);
+                driveChooser.addOption("DDR Drive", ddrDrive);
+                SmartDashboard.putData(driveChooser);
+
+                drivetrain.setDefaultCommand(driveChooser.getSelected());
         }
 
         /**

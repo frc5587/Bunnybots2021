@@ -15,8 +15,8 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
     public static final class DrivetrainConstants {
-        public static final double DDR_FWD = 0.4;
-        public static final double DDR_TURN = 0.3;
+        public static final double DDR_FWD = 0.2;
+        public static final double DDR_TURN = 0.2;
         // motor ports 
         public static final int LEFT_MOTOR = 10;
         public static final int RIGHT_MOTOR = 15;
